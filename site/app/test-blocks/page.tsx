@@ -10,6 +10,8 @@ const blocks: Block[] = [
   {
     type: "cta",
     position: "after_intro",
+    text: "Рассчитать своё число судьбы в Telegram-боте",
+    url: "https://t.me/numerolog_master_bot",
   },
   {
     type: "h2",
@@ -139,6 +141,8 @@ const blocks: Block[] = [
   {
     type: "cta",
     position: "end_of_article",
+    text: "Получить персональный разбор в боте",
+    url: "https://t.me/numerolog_master_bot",
   },
 ];
 

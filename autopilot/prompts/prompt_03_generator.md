@@ -25,7 +25,7 @@
 Перед тем как начать статью — проверь JSON:
 ☑ url совпадает с кластеризацией
 ☑ word_count_target соответствует page_type (hub — 2500, standalone — 2000, spoke — 1200)
-☑ blocks содержит cta after_intro и cta end_of_article
+☑ blocks содержит 2 cta на бота (разные формулировки) и 1 cta mid_article_channel на канал
 ☑ internal_links.up заполнен (кроме hub у которого up: null)
 ☑ primary_keyword есть в meta.h1
 
@@ -152,6 +152,29 @@ Description: [из JSON]
 - `down` — в разделе "Изучите подробнее" (для hub)
 
 Формат: [анкор](/url/)
+
+### Формат блока CTA в финальном JSON
+Каждый блок `cta` в итоговом JSON должен содержать:
+```json
+{
+  "type": "cta",
+  "position": "after_intro" | "after_calculation" | "end_of_article" | "mid_article_channel",
+  "text": "...",
+  "url": "..."
+}
+```
+
+Правила:
+- В статье — максимум 2 CTA на Telegram-бот, с разными формулировками призыва
+  (например: "Узнать своё число судьбы в боте" и "Рассчитать полную карту")
+  Используй позиции `after_intro` + `end_of_article`, либо `after_intro` + `after_calculation`
+  — не все три одновременно.
+- Ровно 1 CTA на Telegram-канал, позиция `mid_article_channel`,
+  размещается в середине статьи (после одного из H2-разделов).
+- Ссылка на бота: `https://t.me/numerolog_master_bot`
+- Ссылка на канал: `https://t.me/chisla_vlasti`
+- Текст призыва на канал — не про расчёт, а про подписку/контент
+  (например: "Больше разборов чисел — в нашем Telegram-канале")
 
 ### Запрещённые слова
 ❌ "включает в себя", "предлагает", "славится"
