@@ -18,7 +18,7 @@
 ## Правила
 - Комментарии в коде на русском языке
 - Вся документация лежит в /docs/
-- Структура блоков — /docs/skill_07_html_components.md
+- Структура блоков — /autopilot/prompts/skills/skill_07_html_components.md
 - Структура страниц — /docs/SITE.md
 
 ## Текущая задача
