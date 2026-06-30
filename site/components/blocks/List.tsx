@@ -5,7 +5,7 @@ interface ListProps {
 
 // Перечисление однородных элементов: ul — порядок не важен, ol — порядок важен
 export default function List({ style, items }: ListProps) {
-  const className = "list-inside space-y-1 text-base leading-relaxed text-slate-800";
+  const className = "list-inside space-y-1 text-base leading-relaxed text-ink";
 
   if (style === "ol") {
     return (

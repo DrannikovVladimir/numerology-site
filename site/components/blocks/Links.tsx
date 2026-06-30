@@ -15,14 +15,14 @@ interface LinksProps {
 export default function Links({ title, items }: LinksProps) {
   return (
     <div className="space-y-3">
-      <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
+      <h2 className="text-xl font-semibold text-ink">{title}</h2>
       <ul className="space-y-2">
         {items.map((item, index) => (
           <li key={index}>
-            <Link href={item.url} className="font-medium text-indigo-600 hover:underline">
+            <Link href={item.url} className="font-medium text-terracotta hover:underline">
               {item.anchor}
             </Link>
-            <span className="text-slate-600"> — {item.description}</span>
+            <span className="text-inkMuted"> — {item.description}</span>
           </li>
         ))}
       </ul>

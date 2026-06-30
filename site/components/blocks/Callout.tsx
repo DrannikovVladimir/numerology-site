@@ -4,9 +4,9 @@ interface CalloutProps {
 }
 
 const VARIANT_STYLES: Record<CalloutProps["variant"], string> = {
-  info: "border-sky-400 bg-sky-50 text-sky-900",
-  tip: "border-emerald-400 bg-emerald-50 text-emerald-900",
-  warning: "border-rose-400 bg-rose-50 text-rose-900",
+  info: "border-teal bg-teal-light text-ink",
+  tip: "border-green-400 bg-green-50 text-ink",
+  warning: "border-terracotta bg-terracotta-light text-ink",
 };
 
 // Ограничение системы, важное замечание или предупреждение

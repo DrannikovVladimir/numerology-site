@@ -10,8 +10,8 @@ const CTA_TEXT: Record<CtaProps["position"], string> = {
 // Призыв к действию — текст зависит от позиции блока в статье
 export default function Cta({ position }: CtaProps) {
   return (
-    <div className="rounded-md bg-indigo-600 px-6 py-4 text-center">
-      <a href="#" className="text-base font-semibold text-white">
+    <div className="rounded-md bg-terracotta px-6 py-4 text-center">
+      <a href="#" className="text-base font-semibold text-cream">
         {CTA_TEXT[position]}
       </a>
     </div>
