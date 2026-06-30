@@ -2,7 +2,9 @@ import fs from "fs/promises";
 import path from "path";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import BlockRenderer, { Block } from "@/components/blocks/BlockRenderer";
+import plannedUrls from "@/content/planned-urls.json";
 
 interface Article {
   page_id: string;
@@ -54,6 +56,25 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const article = await getArticleBySlug(params.slug);
 
   if (!article) {
+    const url = "/" + params.slug.join("/") + "/";
+
+    if (url in plannedUrls) {
+      return (
+        <main className="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center gap-4 bg-parchment px-4 py-12 text-center">
+          <h1 className="text-3xl font-bold text-ink">Страница в разработке</h1>
+          <p className="text-lg text-inkMuted">
+            Эта страница скоро появится — мы уже работаем над ней
+          </p>
+          <Link
+            href="/"
+            className="rounded-md bg-terracotta px-6 py-3 text-base font-semibold text-cream"
+          >
+            На главную
+          </Link>
+        </main>
+      );
+    }
+
     notFound();
   }
 

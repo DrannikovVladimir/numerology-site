@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "PowerShell(Get-Command node)",
-      "PowerShell(Get-Command npm)"
+      "PowerShell(Get-Command npm)",
+      "Bash(node -e \"console.log\\(require\\('./content/semantic_clusters.json'\\).clusters.length\\)\")"
     ]
   }
 }
