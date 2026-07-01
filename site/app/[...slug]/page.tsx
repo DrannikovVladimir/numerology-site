@@ -3,7 +3,9 @@ import path from "path";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import NextImage from "next/image";
 import BlockRenderer, { Block } from "@/components/blocks/BlockRenderer";
+import TableOfContents from "@/components/TableOfContents";
 import plannedUrls from "@/content/planned-urls.json";
 
 interface Article {
@@ -13,6 +15,8 @@ interface Article {
     description: string;
     h1: string;
   };
+  image?: string;
+  image_alt?: string;
   blocks: Block[];
 }
 
@@ -81,6 +85,18 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   return (
     <main className="mx-auto max-w-2xl space-y-6 px-4 py-12">
       <h1 className="text-3xl font-bold text-ink">{article.meta.h1}</h1>
+      {article.image && (
+        <figure className="my-6">
+          <NextImage
+            src={article.image}
+            alt={article.image_alt ?? ""}
+            width={1200}
+            height={630}
+            className="rounded-md w-full h-auto"
+          />
+        </figure>
+      )}
+      <TableOfContents blocks={article.blocks} />
       <BlockRenderer blocks={article.blocks} />
     </main>
   );

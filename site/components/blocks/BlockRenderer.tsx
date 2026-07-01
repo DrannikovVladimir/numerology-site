@@ -10,6 +10,7 @@ import FactRow from "./FactRow";
 import Cta from "./Cta";
 import Faq from "./Faq";
 import Links from "./Links";
+import Image from "./Image";
 
 interface ParagraphBlock {
   type: "paragraph";
@@ -80,6 +81,13 @@ interface LinksBlock {
   items: { url: string; anchor: string; description: string }[];
 }
 
+interface ImageBlock {
+  type: "image";
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
 export type Block =
   | ParagraphBlock
   | H2BlockType
@@ -92,7 +100,8 @@ export type Block =
   | FactRowBlock
   | CtaBlock
   | FaqBlock
-  | LinksBlock;
+  | LinksBlock
+  | ImageBlock;
 
 interface BlockRendererProps {
   blocks: Block[];
@@ -135,6 +144,8 @@ export default function BlockRenderer({ blocks }: BlockRendererProps) {
             return <Faq key={index} items={block.items} />;
           case "links":
             return <Links key={index} title={block.title} items={block.items} />;
+          case "image":
+            return <Image key={index} src={block.src} alt={block.alt} caption={block.caption} />;
           default: {
             const unknownBlock = block as { type: string };
             console.warn(`BlockRenderer: неизвестный тип блока "${unknownBlock.type}"`);
