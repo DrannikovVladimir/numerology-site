@@ -6,10 +6,14 @@ import Link from "next/link";
 import NextImage from "next/image";
 import BlockRenderer, { Block } from "@/components/blocks/BlockRenderer";
 import TableOfContents from "@/components/TableOfContents";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { buildJsonLd } from "@/lib/jsonld";
 import plannedUrls from "@/content/planned-urls.json";
 
 interface Article {
   page_id: string;
+  url?: string;
+  page_type: string;
   meta: {
     title: string;
     description: string;
@@ -17,6 +21,13 @@ interface Article {
   };
   image?: string;
   image_alt?: string;
+  nav_title?: string;
+  internal_links?: {
+    up?: { url: string; anchor: string } | null;
+  };
+  faq?: { question: string; answer: string }[];
+  date_published?: string;
+  date_modified?: string;
   blocks: Block[];
 }
 
@@ -53,6 +64,26 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   return {
     title: article.meta.title,
     description: article.meta.description,
+    alternates: {
+      canonical: `https://example.com${article.url}`,
+    },
+    openGraph: {
+      title: article.meta.title,
+      description: article.meta.description,
+      url: `https://example.com${article.url}`,
+      siteName: "Нумерология",
+      images: article.image
+        ? [{ url: `https://example.com${article.image}`, width: 1200, height: 630, alt: article.image_alt ?? "" }]
+        : [],
+      locale: "ru_RU",
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: article.meta.title,
+      description: article.meta.description,
+      images: article.image ? [`https://example.com${article.image}`] : [],
+    },
   };
 }
 
@@ -82,8 +113,25 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     notFound();
   }
 
+  const pageType = (
+    article.page_type === "hub" || article.page_type === "spoke" || article.page_type === "standalone"
+      ? article.page_type
+      : "standalone"
+  ) as "hub" | "spoke" | "standalone";
+
+  const parentLink = article.internal_links?.up ?? undefined;
+
   return (
     <main className="mx-auto max-w-2xl space-y-6 px-4 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd(article)) }}
+      />
+      <Breadcrumbs
+        pageType={pageType}
+        currentTitle={article.nav_title ?? article.meta.h1}
+        parentLink={parentLink}
+      />
       <h1 className="text-3xl font-bold text-ink">{article.meta.h1}</h1>
       {article.image && (
         <figure className="my-6">
