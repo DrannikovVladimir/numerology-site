@@ -166,27 +166,27 @@ Description: [из JSON]
 Формат: [анкор](/url/)
 
 ### Формат блока CTA в финальном JSON
+
 Каждый блок `cta` в итоговом JSON должен содержать:
 ```json
 {
   "type": "cta",
-  "position": "after_intro" | "after_calculation" | "end_of_article" | "mid_article_channel",
-  "text": "...",
-  "url": "..."
+  "position": "after_intro | after_calculation | end_of_article | mid_article_channel",
+  "heading": "заголовок баннера — конкретный, под тему статьи",
+  "subtext": "одно предложение — усиливает заголовок",
+  "button_text": "текст кнопки →",
+  "url": "https://t.me/numerolog_master_bot или https://t.me/chisla_vlasti"
 }
 ```
 
 Правила:
-- В статье — максимум 2 CTA на Telegram-бот, с разными формулировками призыва
-  (например: "Узнать своё число судьбы в боте" и "Рассчитать полную карту")
-  Используй позиции `after_intro` + `end_of_article`, либо `after_intro` + `after_calculation`
-  — не все три одновременно.
-- Ровно 1 CTA на Telegram-канал, позиция `mid_article_channel`,
-  размещается в середине статьи (после одного из H2-разделов).
+- В статье максимум 2 CTA на бота (`after_intro` + `end_of_article` или `after_intro` + `after_calculation`) с разными `heading` и `button_text`
+- Ровно 1 CTA на канал (`mid_article_channel`), размещается в середине статьи
+- `heading` и `subtext` пишутся под тему конкретной статьи — не универсальные фразы
 - Ссылка на бота: `https://t.me/numerolog_master_bot`
 - Ссылка на канал: `https://t.me/chisla_vlasti`
-- Текст призыва на канал — не про расчёт, а про подписку/контент
-  (например: "Больше разборов чисел — в нашем Telegram-канале")
+- `button_text` для бота — про расчёт или действие ("Узнать →", "Рассчитать →")
+- `button_text` для канала — про подписку ("Перейти в канал →")
 
 ### Запрещённые слова
 ❌ "включает в себя", "предлагает", "славится"

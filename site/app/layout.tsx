@@ -46,6 +46,28 @@ export default function RootLayout({
         {children}
         <Footer />
         <ScrollToTop />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "WebSite",
+                  "name": "Нумерология",
+                  "url": "https://example.com/"
+                },
+                {
+                  "@type": "Organization",
+                  "name": "Нумерология",
+                  "url": "https://example.com/",
+                  "logo": "https://example.com/images/logo.png",
+                  "sameAs": ["https://t.me/chisla_vlasti"]
+                }
+              ]
+            })
+          }}
+        />
       </body>
     </html>
   );

@@ -141,11 +141,45 @@ Standalone: 2-3 пары вопрос-ответ
 
 ### РАЗДЕЛ 5 — CTA-БЛОКИ
 
-Только placeholders — текст не пиши:
+Сгенерируй реальные тексты для трёх CTA под тему этой конкретной статьи:
+
+**CTA 1 — после введения (бот):**
+```json
+{
+  "type": "cta", "position": "after_intro",
+  "heading": "...",
+  "subtext": "...",
+  "button_text": "... →",
+  "url": "https://t.me/numerolog_master_bot"
+}
 ```
-[CTA_BLOCK: тип=баннер, место=после_введения]
-[CTA_BLOCK: тип=баннер, место=конец_статьи]
+
+**CTA 2 — середина статьи (канал):**
+```json
+{
+  "type": "cta", "position": "mid_article_channel",
+  "heading": "...",
+  "subtext": "...",
+  "button_text": "Перейти в канал →",
+  "url": "https://t.me/chisla_vlasti"
+}
 ```
+
+**CTA 3 — конец статьи (бот, другая формулировка):**
+```json
+{
+  "type": "cta", "position": "end_of_article",
+  "heading": "...",
+  "subtext": "...",
+  "button_text": "... →",
+  "url": "https://t.me/numerolog_master_bot"
+}
+```
+
+Правила:
+- `heading` CTA 1 и CTA 3 — разные формулировки, оба про расчёт в боте
+- `heading` CTA 2 — про контент канала, не про расчёт
+- Все тексты релевантны теме статьи (совместимость → про пару, часы → про знаки)
 
 ### РАЗДЕЛ 6 — JSON ДЛЯ АГЕНТА
 

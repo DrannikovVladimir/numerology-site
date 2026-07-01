@@ -22,6 +22,7 @@ interface Article {
   image?: string;
   image_alt?: string;
   nav_title?: string;
+  primary_keyword?: string;
   internal_links?: {
     up?: { url: string; anchor: string } | null;
   };
@@ -64,6 +65,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   return {
     title: article.meta.title,
     description: article.meta.description,
+    keywords: article.primary_keyword,
     alternates: {
       canonical: `https://example.com${article.url}`,
     },

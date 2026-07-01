@@ -166,10 +166,26 @@
 ```json
 {
   "type": "cta",
-  "position": "after_intro"
+  "position": "after_intro | after_calculation | end_of_article | mid_article_channel",
+  "heading": "заголовок баннера — 5-8 слов, конкретно и по теме статьи",
+  "subtext": "подзаголовок — одно предложение, усиливает заголовок",
+  "button_text": "текст кнопки →",
+  "url": "https://t.me/numerolog_master_bot или https://t.me/chisla_vlasti"
 }
 ```
-Позиции: "after_intro" / "end_of_article"
+
+Позиции:
+- `after_intro` — после вводного абзаца, ссылка на бота
+- `after_calculation` — после раздела с расчётом, ссылка на бота
+- `end_of_article` — в конце статьи, ссылка на бота
+- `mid_article_channel` — в середине статьи, ссылка на канал
+
+Правила:
+- Максимум 2 CTA на бота с разными `heading` и `button_text`
+- Ровно 1 CTA на канал (`mid_article_channel`)
+- `heading` и `subtext` релевантны теме конкретной статьи
+- Ссылка на бота: `https://t.me/numerolog_master_bot`
+- Ссылка на канал: `https://t.me/chisla_vlasti`
 
 ### faq
 ```json
