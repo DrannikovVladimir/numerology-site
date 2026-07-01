@@ -65,9 +65,11 @@ interface FactRowBlock {
 
 interface CtaBlock {
   type: "cta";
-  text: string;
+  position: "after_intro" | "after_calculation" | "end_of_article" | "mid_article_channel";
+  heading: string;
+  subtext: string;
+  button_text: string;
   url: string;
-  position?: "after_intro" | "after_calculation" | "end_of_article";
 }
 
 interface FaqBlock {
@@ -139,7 +141,7 @@ export default function BlockRenderer({ blocks }: BlockRendererProps) {
           case "fact_row":
             return <FactRow key={index} items={block.items} />;
           case "cta":
-            return <Cta key={index} text={block.text} url={block.url} position={block.position} />;
+            return <Cta key={index} position={block.position} heading={block.heading} subtext={block.subtext} button_text={block.button_text} url={block.url} />;
           case "faq":
             return <Faq key={index} items={block.items} />;
           case "links":
