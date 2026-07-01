@@ -159,6 +159,7 @@ Standalone: 2-3 пары вопрос-ответ
   "page_id": "slug-stranitsy",
   "page_type": "hub | spoke | standalone",
   "hub_id": "slug-roditelskogo-hub или null",
+  "nav_title": "короткое название для хлебных крошек, 2-4 слова (для hub — название раздела, для spoke — тема страницы)",
   "url": "/url/",
   "primary_keyword": "главный запрос",
   "cluster_keywords": [

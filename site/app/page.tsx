@@ -1,4 +1,26 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Нумерология — язык чисел, на котором написана ваша жизнь",
+  description: "Нумерология онлайн: числа судьбы, матрица судьбы, ангельские числа, совместимость. Разберитесь с нуля или углубитесь в детали.",
+  alternates: {
+    canonical: "https://example.com/",
+  },
+  openGraph: {
+    title: "Нумерология — язык чисел, на котором написана ваша жизнь",
+    description: "Нумерология онлайн: числа судьбы, матрица судьбы, ангельские числа, совместимость. Разберитесь с нуля или углубитесь в детали.",
+    url: "https://example.com/",
+    siteName: "Нумерология",
+    locale: "ru_RU",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Нумерология — язык чисел, на котором написана ваша жизнь",
+    description: "Нумерология онлайн: числа судьбы, матрица судьбы, ангельские числа, совместимость.",
+  },
+};
 
 interface HubCard {
   href: string;
