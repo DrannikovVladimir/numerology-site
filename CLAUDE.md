@@ -25,7 +25,8 @@
       Paragraph.tsx           ← поддерживает Markdown-ссылки [текст](url)
       H2.tsx, H3.tsx          ← якоря через slugify, hover-ссылка #
       Fact.tsx, Quote.tsx, Table.tsx, List.tsx
-      Callout.tsx, FactRow.tsx, Cta.tsx, Faq.tsx, Links.tsx
+      Callout.tsx             ← варианты: tip, warning, info, important, practice
+      FactRow.tsx, Cta.tsx, Faq.tsx, Links.tsx
       Image.tsx               ← next/image с caption
       BlockRenderer.tsx       ← 13 типов блоков
   /lib/
@@ -43,15 +44,33 @@
 
 /content/                     ← JSON-статьи и изображения (вне /site/)
   semantic_clusters.json      ← реестр всех 178 кластеров
-  /published/                 ← 9 готовых hub-статей
+  /published/                 ← 9 hub-статей + spoke-статьи (числа судьбы 1, 2, 3)
   /pending/, /error/          ← не используются пока
 
 /autopilot/
   update-planned-urls.js      ← обновляет site/content/planned-urls.json
+  linkbuilder.js              ← [TODO] автоматическая простановка контекстных ссылок
   /prompts/
-    prompt_02_onpage.md
-    prompt_03_generator.md
-    /skills/skill_01..08*.md
+    prompt_02_onpage.md       ← генератор карточки кластера
+    prompt_03_generator.md    ← генератор статьи
+    /skills/
+      skill_01_seo_role.md
+      skill_02_tov_numerology.md
+      skill_03_content_rules.md
+      skill_06_checklist.md
+      skill_07_html_components.md
+      skill_08_jsonld_meta.md
+      skill_05_base.md        ← базовые правила для всех spoke-страниц
+      /hub/
+        skill_04_structure_hub.md
+        skill_04b_structure_standalone.md
+      /spoke/
+        skill_05_chislo-sudby-1-9.md
+        skill_05_chislo-sudby-mastery.md  ← [TODO] мастер-числа 11, 22, 33
+        skill_05_sovmestimost.md
+        skill_05_chasy-00-23.md
+        skill_05_angelskie-chisla.md
+        skill_05_mesyacy.md
 
 /docs/                        ← документация проекта
 ```
@@ -78,6 +97,7 @@ inkMuted:   '#6B5A47'  текст вторичный
 - Базовая структура Next.js 14, TypeScript, Tailwind, палитра настроена
 - 13 компонентов блоков (paragraph, h2, h3, fact, quote, table, list,
   callout, fact_row, cta, faq, links, image) + BlockRenderer
+- Callout поддерживает варианты: tip, warning, info, important, practice
 - Главная страница (hero + сетка 9 хабов) с OG тегами
 - Header (sticky, бургер-меню с полным списком хабов) и Footer
 - Хлебные крошки (2 уровня для hub, 3 для spoke)
@@ -100,28 +120,41 @@ inkMuted:   '#6B5A47'  текст вторичный
 
 ### Контент
 - 9 hub-статей опубликованы в content/published/
+- Spoke-страницы: числа судьбы 1, 2, 3 опубликованы — hub→spoke цикл проверен
 - Изображения для всех 9 хабов в site/public/images/hub/
 - CTA-правило: 2 CTA на бота (разные формулировки) + 1 на канал (mid_article_channel)
 - nav_title поле в каждой статье — короткое название для крошек
+
+### Контентная система (промпты и скилы)
+- prompt_02_onpage.md — генерирует карточку кластера (JSON-скелет)
+- prompt_03_generator.md — генерирует финальную статью по карточке
+- Скилы разделены на базовые и серийные:
+  - skill_05_base.md — общие правила для всех spoke
+  - /spoke/ папка — отдельный файл для каждой серии с уникальными блоками
+- Протестированные серии: chislo-sudby-1-9, sovmestimost, chasy-00-23, angelskie-chisla, mesyacy
+- Контекстные ссылки в тексте — правило в prompt_03, приоритет опубликованным URL
 
 ### Скрипты
 - node autopilot/update-planned-urls.js — обновляет planned-urls.json
   (запускать после добавления новых статей в content/published/)
 
 ## Не сделано / следующие шаги
-- Spoke и standalone страницы (контент + проверка роутинга)
-- Логотип в хедере (сейчас текст, нужна иконка)
-- Мобильная полировка
-- Автопилот, хранилище, деплой — намеренно не трогаем
+- skill_05_chislo-sudby-mastery.md — скил для мастер-чисел 11, 22, 33
+- linkbuilder.js — автоматическая простановка контекстных ссылок перед публикацией
+- Мобильная полировка — не проверялась вживую
+- Логотип в хедере — сейчас текст, нужна иконка лабиринта
+- Деплой — VPS, Nginx, PM2, реальный домен вместо example.com
+- Автопилот — generate.js, publish.js, telegram.js (намеренно не трогаем)
 
 ## Формат JSON статьи (ключевые поля)
 ```json
 {
   "page_id": "slug",
   "page_type": "hub | spoke | standalone",
-  "hub_id": null,
+  "hub_id": "через-дефисы (из semantic_clusters.json)",
   "nav_title": "Короткое название",
   "url": "/url/",
+  "template": "chislo-sudby-1-9 | sovmestimost | chasy-00-23 | angelskie-chisla | mesyacy | null",
   "meta": { "title": "...", "description": "...", "h1": "..." },
   "image": "/images/hub/папка/файл.jpg",
   "image_alt": "описание картинки",
@@ -141,6 +174,7 @@ inkMuted:   '#6B5A47'  текст вторичный
 ## Правила
 - Комментарии в коде на русском языке
 - Вся документация лежит в /docs/
+- hub_id всегда через дефисы — брать точно из semantic_clusters.json
 - Структура блоков — /autopilot/prompts/skills/skill_07_html_components.md
 - Структура страниц — /docs/SITE.md
 - Домен пока плейсхолдер https://example.com — заменить везде когда появится

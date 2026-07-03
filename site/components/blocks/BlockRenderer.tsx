@@ -54,7 +54,7 @@ interface ListBlock {
 
 interface CalloutBlock {
   type: "callout";
-  variant: "info" | "tip" | "warning";
+  variant: "info" | "tip" | "warning" | "practice";
   text: string;
 }
 

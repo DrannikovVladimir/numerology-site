@@ -1,5 +1,5 @@
 interface CalloutProps {
-  variant: "info" | "tip" | "warning";
+  variant: "info" | "tip" | "warning" | "practice";
   text: string;
 }
 
@@ -24,6 +24,12 @@ const VARIANT_CONFIG: Record<
     labelClass: "bg-terracotta text-cream",
     textClass: "text-terracotta",
     label: "Внимание",
+  },
+  practice: {
+    wrapperClass: "border-[#B8860B] bg-[#FFF8E7]",
+    labelClass: "bg-[#B8860B] text-white",
+    textClass: "text-[#5C4A1E]",
+    label: "Практика",
   },
 };
 
