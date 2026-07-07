@@ -5,6 +5,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --header-h: 64px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -12,6 +13,10 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+[id] {
+  scroll-margin-top: var(--header-h);
 }
 
 body {

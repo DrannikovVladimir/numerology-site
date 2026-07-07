@@ -19,6 +19,7 @@ Spoke — узкая глубокая страница которая:
 | `chasy-00-23` | skill_05_chasy-00-23.md |
 | `angelskie-chisla` | skill_05_angelskie-chisla.md |
 | `mesyacy` | skill_05_mesyacy.md |
+| `matrica-sudby` | skill_05_matrica-sudby.md |
 
 Прочитай этот файл первым — он содержит правила общие для всех серий.
 Затем читай файл своей серии — он содержит структуру и JSON-пример.
