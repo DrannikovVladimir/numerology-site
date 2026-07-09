@@ -18,17 +18,27 @@ semantic_clusters.json
 
 ```
 /autopilot/prompts/
-  prompt_02.md              ← генератор карточки
-  prompt_03.md              ← генератор статьи
+  prompt_02_onpage.md         ← генератор карточки
+  prompt_03_generator.md      ← генератор статьи
   skills/
     skill_01_seo_role.md        ← роль и контекст
     skill_02_tov_numerology.md  ← тон голоса
     skill_03_content_rules.md   ← правила контента
-    skill_04_structure_hub.md   ← структура hub
-    skill_04b_structure_standalone.md ← структура standalone
-    skill_05_structure_spoke.md ← структура spoke + шаблоны серий
     skill_06_checklist.md       ← чек-лист качества
     skill_07_html_components.md ← библиотека блоков
+    skill_08_jsonld_meta.md     ← сборка JSON-LD
+    skill_05_base.md            ← базовые правила для всех spoke (объём, CTA, перелинковка)
+    /hub/
+      skill_04_structure_hub.md         ← структура hub
+      skill_04b_structure_standalone.md ← структура standalone
+    /spoke/
+      skill_05_chislo-sudby-1-9.md      ← отдельный файл на каждую серию
+      skill_05_chislo-sudby-mastery.md     с уникальными блоками —
+      skill_05_sovmestimost.md             не один общий skill_05_structure_spoke.md
+      skill_05_chasy-00-23.md
+      skill_05_angelskie-chisla.md
+      skill_05_mesyacy.md
+      skill_05_matrica-sudby.md
 ```
 
 ## Типы страниц и шаблоны
@@ -42,6 +52,7 @@ semantic_clusters.json
 | Spoke (ангельские числа) | angelskie-chisla | 1200–1500 слов | Автопилот |
 | Spoke (месяцы) | mesyacy | 1200–1500 слов | Автопилот |
 | Spoke (совместимость) | sovmestimost | 1200–1500 слов | Автопилот |
+| Spoke (матрица судьбы) | matrica-sudby | 1200–1500 слов | Автопилот — структура (9 vs 17 страниц) не утверждена, см. /docs/CLAUDE.md |
 
 ## Промпт 2 — карточка
 

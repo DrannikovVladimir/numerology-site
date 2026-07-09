@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Hash, Calendar, Compass, BookOpen, Star, Grid3x3, Square, HeartHandshake, Type, Clock, CalendarDays, Sparkles, LucideIcon } from "lucide-react";
 import DestinyCalculator from "@/components/DestinyCalculator";
 import NumberWheel from "@/components/NumberWheel";
+import PsychomatrixCalculator from "@/components/PsychomatrixCalculator";
 import Cta from "@/components/blocks/Cta";
 
 export const metadata: Metadata = {
@@ -127,7 +128,7 @@ export default function Home() {
             priority
           />
         </div>
-      </section>
+      </section>      
 
       <section className="mt-16">
         <h2 className="text-center text-2xl font-bold text-ink">
@@ -173,28 +174,68 @@ export default function Home() {
         </div>
       </section>
 
-      <h2 className="mt-12 text-center text-2xl font-bold text-ink">
-        Разделы нумерологии
-      </h2>
-      <p className="mx-auto max-w-2xl text-center text-base leading-relaxed text-inkMuted mt-3">
-        Ниже — девять направлений нумерологии, от числа судьбы до матрицы личности. Разберитесь в
-        основах или сразу переходите к тому, что интересно именно вам.
-      </p>
+      <section className="relative mt-16 overflow-hidden rounded-[20px] bg-ink px-6 py-10 sm:px-10 sm:py-12 lg:px-12 lg:py-16">
+        <svg
+          className="pointer-events-none absolute -right-10 -top-10 opacity-[0.12]"
+          width="180"
+          height="180"
+          viewBox="0 0 180 180"
+          aria-hidden="true"
+        >
+          <circle cx="90" cy="90" r="85" stroke="#F2E4C9" strokeWidth="1.5" fill="none" />
+          <circle cx="90" cy="90" r="62" stroke="#F2E4C9" strokeWidth="1" fill="none" />
+          <circle cx="90" cy="90" r="40" stroke="#F2E4C9" strokeWidth="1" fill="none" />
+        </svg>
+        <svg
+          className="pointer-events-none absolute -bottom-8 -left-8 opacity-[0.08]"
+          width="120"
+          height="120"
+          viewBox="0 0 120 120"
+          aria-hidden="true"
+        >
+          <circle cx="60" cy="60" r="55" stroke="#F2E4C9" strokeWidth="1.5" fill="none" />
+          <circle cx="60" cy="60" r="35" stroke="#F2E4C9" strokeWidth="1" fill="none" />
+        </svg>
+        <div className="relative">
+          <h2 className="text-center text-2xl font-bold text-cream">
+            Матрица судьбы по дате рождения
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-center text-base text-[#C9A876]">
+            Тот же метод известен и как{" "}
+            <Link href="/kvadrat-pifagora/" className="text-[#F0D5C4] hover:underline">
+              квадрат Пифагора
+            </Link>
+          </p>
+          <div className="mt-8">
+            <PsychomatrixCalculator />
+          </div>
+        </div>
+      </section>
 
-      <section id="hubs" className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {HUBS.map((hub) => (
-          <Link
-            key={hub.href}
-            href={hub.href}
-            className="rounded-md border border-sand bg-cream p-5 transition-colors hover:border-terracotta"
-          >
-            <div className="flex items-center gap-2">
-              <hub.icon className="h-[18px] w-[18px] text-teal" />
-              <h2 className="text-lg font-semibold text-teal">{hub.title}</h2>
-            </div>
-            <p className="mt-2 text-sm leading-relaxed text-inkMuted">{hub.description}</p>
-          </Link>
-        ))}
+      <section>
+        <h2 className="mt-12 text-center text-2xl font-bold text-ink">
+          Разделы нумерологии
+        </h2>
+        <p className="mx-auto max-w-2xl text-center text-base leading-relaxed text-inkMuted mt-3">
+          Ниже — девять направлений нумерологии, от числа судьбы до матрицы личности. Разберитесь в
+          основах или сразу переходите к тому, что интересно именно вам.
+        </p>
+
+        <div id="hubs" className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {HUBS.map((hub) => (
+            <Link
+              key={hub.href}
+              href={hub.href}
+              className="rounded-md border border-sand bg-cream p-5 transition-colors hover:border-terracotta"
+            >
+              <div className="flex items-center gap-2">
+                <hub.icon className="h-[18px] w-[18px] text-teal" />
+                <h2 className="text-lg font-semibold text-teal">{hub.title}</h2>
+              </div>
+              <p className="mt-2 text-sm leading-relaxed text-inkMuted">{hub.description}</p>
+            </Link>
+          ))}
+        </div>
       </section>
 
       <section className="relative mt-16 overflow-hidden rounded-[20px] bg-teal px-6 py-10 sm:px-10 sm:py-12 lg:px-12 lg:py-16">

@@ -42,6 +42,8 @@
 /angelskie-chisla/111/  ...  /angelskie-chisla/999/
 
 /numerologiya-mesyaca/yanvar/  ...  /numerologiya-mesyaca/dekabr/
+
+/matrica-sudby/1/  ...  /matrica-sudby/9/
 ```
 
 ### Standalone-страницы
@@ -63,7 +65,7 @@
 
 ### Служебные страницы
 ```
-/                 ← лендинг
+/                 ← лендинг, полный список секций — см. /docs/CLAUDE.md → «Главная страница»
 /sitemap.xml      ← генерируется автоматически
 /robots.txt
 /404
@@ -72,11 +74,12 @@
 ## Итого страниц
 ```
 Hub:          9
-Spoke:       ~160
+Spoke:       ~160 + 9 под матрицу судьбы (по ячейкам; линии — разделы внутри
+                   хаба и ячеек, не отдельные URL, см. CLAUDE.md)
 Standalone:   13
 Служебные:     4
 ──────────────────
-Итого:       ~186
+Итого:       ~187
 ```
 
 ## Рендер страницы

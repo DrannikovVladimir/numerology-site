@@ -1,6 +1,6 @@
 {
   "meta": {
-    "total": 189,
+    "total": 181,
     "generated_at": "2026-06-29T13:55:56.852Z",
     "source": "semantic_clusters.md"
   },
@@ -140,11 +140,8 @@
         "много цифр 1 в матрице судьбы",
         "цифра 1 психоматрица значение"
       ],
-      "unit_type": "cell",
-      "digits": [
-        1
-      ],
-      "id": 5
+      "id": 5,
+      "digit": 1
     },
     {
       "page_id": "matrica_sudby_2",
@@ -165,11 +162,8 @@
         "много цифр 2 в матрице судьбы",
         "цифра 2 психоматрица значение"
       ],
-      "unit_type": "cell",
-      "digits": [
-        2
-      ],
-      "id": 6
+      "id": 6,
+      "digit": 2
     },
     {
       "page_id": "matrica_sudby_3",
@@ -190,11 +184,8 @@
         "много цифр 3 в матрице судьбы",
         "цифра 3 психоматрица значение"
       ],
-      "unit_type": "cell",
-      "digits": [
-        3
-      ],
-      "id": 7
+      "id": 7,
+      "digit": 3
     },
     {
       "page_id": "matrica_sudby_4",
@@ -215,11 +206,8 @@
         "много цифр 4 в матрице судьбы",
         "цифра 4 психоматрица значение"
       ],
-      "unit_type": "cell",
-      "digits": [
-        4
-      ],
-      "id": 8
+      "id": 8,
+      "digit": 4
     },
     {
       "page_id": "matrica_sudby_5",
@@ -240,11 +228,8 @@
         "много цифр 5 в матрице судьбы",
         "цифра 5 психоматрица значение"
       ],
-      "unit_type": "cell",
-      "digits": [
-        5
-      ],
-      "id": 9
+      "id": 9,
+      "digit": 5
     },
     {
       "page_id": "matrica_sudby_6",
@@ -265,11 +250,8 @@
         "много цифр 6 в матрице судьбы",
         "цифра 6 психоматрица значение"
       ],
-      "unit_type": "cell",
-      "digits": [
-        6
-      ],
-      "id": 10
+      "id": 10,
+      "digit": 6
     },
     {
       "page_id": "matrica_sudby_7",
@@ -290,11 +272,8 @@
         "много цифр 7 в матрице судьбы",
         "цифра 7 психоматрица значение"
       ],
-      "unit_type": "cell",
-      "digits": [
-        7
-      ],
-      "id": 11
+      "id": 11,
+      "digit": 7
     },
     {
       "page_id": "matrica_sudby_8",
@@ -315,11 +294,8 @@
         "много цифр 8 в матрице судьбы",
         "цифра 8 психоматрица значение"
       ],
-      "unit_type": "cell",
-      "digits": [
-        8
-      ],
-      "id": 12
+      "id": 12,
+      "digit": 8
     },
     {
       "page_id": "matrica_sudby_9",
@@ -340,230 +316,11 @@
         "много цифр 9 в матрице судьбы",
         "цифра 9 психоматрица значение"
       ],
-      "unit_type": "cell",
-      "digits": [
-        9
-      ],
-      "id": 13
+      "id": 13,
+      "digit": 9
     },
     {
-      "page_id": "matrica_sudby_147",
-      "title": "Линия 1-4-7 в матрице судьбы",
-      "content_type": "info",
-      "page_type": "spoke",
-      "hub_id": "matrica_sudby",
-      "url": "/matrica-sudby/1-4-7/",
-      "primary_keyword": "линия 1-4-7 в матрице судьбы",
-      "frequency": null,
-      "template": "matrica-sudby",
-      "status": "pending",
-      "created_at": "2026-07-07T00:00:00.000Z",
-      "updated_at": "2026-07-07T00:00:00.000Z",
-      "cluster_keywords": [
-        "линия 1-4-7 в матрице судьбы",
-        "линия 1-4-7 значение",
-        "сильная линия 1-4-7",
-        "слабая линия 1-4-7"
-      ],
-      "unit_type": "line",
-      "digits": [
-        1,
-        4,
-        7
-      ],
-      "id": 14
-    },
-    {
-      "page_id": "matrica_sudby_258",
-      "title": "Линия 2-5-8 в матрице судьбы",
-      "content_type": "info",
-      "page_type": "spoke",
-      "hub_id": "matrica_sudby",
-      "url": "/matrica-sudby/2-5-8/",
-      "primary_keyword": "линия 2-5-8 в матрице судьбы",
-      "frequency": null,
-      "template": "matrica-sudby",
-      "status": "pending",
-      "created_at": "2026-07-07T00:00:00.000Z",
-      "updated_at": "2026-07-07T00:00:00.000Z",
-      "cluster_keywords": [
-        "линия 2-5-8 в матрице судьбы",
-        "линия 2-5-8 значение",
-        "сильная линия 2-5-8",
-        "слабая линия 2-5-8"
-      ],
-      "unit_type": "line",
-      "digits": [
-        2,
-        5,
-        8
-      ],
-      "id": 15
-    },
-    {
-      "page_id": "matrica_sudby_369",
-      "title": "Линия 3-6-9 в матрице судьбы",
-      "content_type": "info",
-      "page_type": "spoke",
-      "hub_id": "matrica_sudby",
-      "url": "/matrica-sudby/3-6-9/",
-      "primary_keyword": "линия 3-6-9 в матрице судьбы",
-      "frequency": null,
-      "template": "matrica-sudby",
-      "status": "pending",
-      "created_at": "2026-07-07T00:00:00.000Z",
-      "updated_at": "2026-07-07T00:00:00.000Z",
-      "cluster_keywords": [
-        "линия 3-6-9 в матрице судьбы",
-        "линия 3-6-9 значение",
-        "сильная линия 3-6-9",
-        "слабая линия 3-6-9"
-      ],
-      "unit_type": "line",
-      "digits": [
-        3,
-        6,
-        9
-      ],
-      "id": 16
-    },
-    {
-      "page_id": "matrica_sudby_123",
-      "title": "Линия 1-2-3 в матрице судьбы",
-      "content_type": "info",
-      "page_type": "spoke",
-      "hub_id": "matrica_sudby",
-      "url": "/matrica-sudby/1-2-3/",
-      "primary_keyword": "линия 1-2-3 в матрице судьбы",
-      "frequency": null,
-      "template": "matrica-sudby",
-      "status": "pending",
-      "created_at": "2026-07-07T00:00:00.000Z",
-      "updated_at": "2026-07-07T00:00:00.000Z",
-      "cluster_keywords": [
-        "линия 1-2-3 в матрице судьбы",
-        "линия 1-2-3 значение",
-        "сильная линия 1-2-3",
-        "слабая линия 1-2-3"
-      ],
-      "unit_type": "line",
-      "digits": [
-        1,
-        2,
-        3
-      ],
-      "id": 17
-    },
-    {
-      "page_id": "matrica_sudby_456",
-      "title": "Линия 4-5-6 в матрице судьбы",
-      "content_type": "info",
-      "page_type": "spoke",
-      "hub_id": "matrica_sudby",
-      "url": "/matrica-sudby/4-5-6/",
-      "primary_keyword": "линия 4-5-6 в матрице судьбы",
-      "frequency": null,
-      "template": "matrica-sudby",
-      "status": "pending",
-      "created_at": "2026-07-07T00:00:00.000Z",
-      "updated_at": "2026-07-07T00:00:00.000Z",
-      "cluster_keywords": [
-        "линия 4-5-6 в матрице судьбы",
-        "линия 4-5-6 значение",
-        "сильная линия 4-5-6",
-        "слабая линия 4-5-6"
-      ],
-      "unit_type": "line",
-      "digits": [
-        4,
-        5,
-        6
-      ],
-      "id": 18
-    },
-    {
-      "page_id": "matrica_sudby_789",
-      "title": "Линия 7-8-9 в матрице судьбы",
-      "content_type": "info",
-      "page_type": "spoke",
-      "hub_id": "matrica_sudby",
-      "url": "/matrica-sudby/7-8-9/",
-      "primary_keyword": "линия 7-8-9 в матрице судьбы",
-      "frequency": null,
-      "template": "matrica-sudby",
-      "status": "pending",
-      "created_at": "2026-07-07T00:00:00.000Z",
-      "updated_at": "2026-07-07T00:00:00.000Z",
-      "cluster_keywords": [
-        "линия 7-8-9 в матрице судьбы",
-        "линия 7-8-9 значение",
-        "сильная линия 7-8-9",
-        "слабая линия 7-8-9"
-      ],
-      "unit_type": "line",
-      "digits": [
-        7,
-        8,
-        9
-      ],
-      "id": 19
-    },
-    {
-      "page_id": "matrica_sudby_159",
-      "title": "Линия 1-5-9 в матрице судьбы",
-      "content_type": "info",
-      "page_type": "spoke",
-      "hub_id": "matrica_sudby",
-      "url": "/matrica-sudby/1-5-9/",
-      "primary_keyword": "линия 1-5-9 в матрице судьбы",
-      "frequency": null,
-      "template": "matrica-sudby",
-      "status": "pending",
-      "created_at": "2026-07-07T00:00:00.000Z",
-      "updated_at": "2026-07-07T00:00:00.000Z",
-      "cluster_keywords": [
-        "линия 1-5-9 в матрице судьбы",
-        "линия 1-5-9 значение",
-        "сильная линия 1-5-9",
-        "слабая линия 1-5-9"
-      ],
-      "unit_type": "line",
-      "digits": [
-        1,
-        5,
-        9
-      ],
-      "id": 20
-    },
-    {
-      "page_id": "matrica_sudby_357",
-      "title": "Линия 3-5-7 в матрице судьбы",
-      "content_type": "info",
-      "page_type": "spoke",
-      "hub_id": "matrica_sudby",
-      "url": "/matrica-sudby/3-5-7/",
-      "primary_keyword": "линия 3-5-7 в матрице судьбы",
-      "frequency": null,
-      "template": "matrica-sudby",
-      "status": "pending",
-      "created_at": "2026-07-07T00:00:00.000Z",
-      "updated_at": "2026-07-07T00:00:00.000Z",
-      "cluster_keywords": [
-        "линия 3-5-7 в матрице судьбы",
-        "линия 3-5-7 значение",
-        "сильная линия 3-5-7",
-        "слабая линия 3-5-7"
-      ],
-      "unit_type": "line",
-      "digits": [
-        3,
-        5,
-        7
-      ],
-      "id": 21
-    },
-    {
-      "id": 22,
+      "id": 14,
       "page_id": "kvadrat_pifagora",
       "title": "Квадрат Пифагора — главная",
       "content_type": "info",
@@ -600,7 +357,7 @@
       ]
     },
     {
-      "id": 23,
+      "id": 15,
       "page_id": "sovmestimost",
       "title": "Совместимость по нумерологии — главная",
       "content_type": "info",
@@ -633,7 +390,7 @@
       ]
     },
     {
-      "id": 24,
+      "id": 16,
       "page_id": "numerologiya_imeni",
       "title": "Нумерология имени",
       "content_type": "info",
@@ -665,7 +422,7 @@
       ]
     },
     {
-      "id": 25,
+      "id": 17,
       "page_id": "numerologiya_mesyaca",
       "title": "Нумерология месяца — главная",
       "content_type": "info",
@@ -685,7 +442,7 @@
       ]
     },
     {
-      "id": 26,
+      "id": 18,
       "page_id": "angelskie_chisla",
       "title": "Ангельские числа — главная",
       "content_type": "info",
@@ -708,7 +465,7 @@
       ]
     },
     {
-      "id": 27,
+      "id": 19,
       "page_id": "numerologiya_po_date_rozhdeniya",
       "title": "Нумерология по дате рождения",
       "content_type": "calc",
@@ -734,7 +491,7 @@
       ]
     },
     {
-      "id": 28,
+      "id": 20,
       "page_id": "znachenie_cifr",
       "title": "Значение цифр в нумерологии",
       "content_type": "info",
@@ -763,7 +520,7 @@
       ]
     },
     {
-      "id": 29,
+      "id": 21,
       "page_id": "vedicheskaya_numerologiya",
       "title": "Ведическая нумерология",
       "content_type": "info",
@@ -791,7 +548,7 @@
       ]
     },
     {
-      "id": 30,
+      "id": 22,
       "page_id": "matrica_sudby_sovmestimost",
       "title": "Совместимость матрица судьбы",
       "content_type": "calc",
@@ -819,7 +576,7 @@
       ]
     },
     {
-      "id": 31,
+      "id": 23,
       "page_id": "matrica_sudby_rasshifrovka",
       "title": "Матрица судьбы расшифровка чисел",
       "content_type": "info",
@@ -848,7 +605,7 @@
       ]
     },
     {
-      "id": 32,
+      "id": 24,
       "page_id": "prognoz_na_god",
       "title": "Нумерология — прогноз на год",
       "content_type": "info",
@@ -875,7 +632,7 @@
       ]
     },
     {
-      "id": 33,
+      "id": 25,
       "page_id": "lichnyj_god",
       "title": "Нумерология — личный год",
       "content_type": "info",
@@ -900,7 +657,7 @@
       ]
     },
     {
-      "id": 34,
+      "id": 26,
       "page_id": "karma_po_date_rozhdeniya",
       "title": "Карма по дате рождения",
       "content_type": "info",
@@ -932,7 +689,7 @@
       ]
     },
     {
-      "id": 35,
+      "id": 27,
       "page_id": "denezhnyj_kod",
       "title": "Денежный код / финансовый код",
       "content_type": "info",
@@ -963,7 +720,7 @@
       ]
     },
     {
-      "id": 36,
+      "id": 28,
       "page_id": "grafik_sudby",
       "title": "График судьбы и воли",
       "content_type": "info",
@@ -994,7 +751,7 @@
       ]
     },
     {
-      "id": 37,
+      "id": 29,
       "page_id": "numerologiya_kvartiry",
       "title": "Нумерология квартиры",
       "content_type": "info",
@@ -1017,7 +774,7 @@
       ]
     },
     {
-      "id": 38,
+      "id": 30,
       "page_id": "numerologiya_telefona",
       "title": "Нумерология номера телефона",
       "content_type": "info",
@@ -1042,7 +799,7 @@
       ]
     },
     {
-      "id": 39,
+      "id": 31,
       "page_id": "karmaticheskie_otnosheniya",
       "title": "Кармические отношения",
       "content_type": "info",
@@ -1072,7 +829,7 @@
       ]
     },
     {
-      "id": 40,
+      "id": 32,
       "page_id": "chislo_sudby_1",
       "title": "Число судьбы 1",
       "content_type": "info",
@@ -1088,7 +845,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 41,
+      "id": 33,
       "page_id": "chislo_sudby_2",
       "title": "Число судьбы 2",
       "content_type": "info",
@@ -1104,7 +861,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 42,
+      "id": 34,
       "page_id": "chislo_sudby_3",
       "title": "Число судьбы 3",
       "content_type": "info",
@@ -1120,7 +877,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 43,
+      "id": 35,
       "page_id": "chislo_sudby_4",
       "title": "Число судьбы 4",
       "content_type": "info",
@@ -1136,7 +893,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 44,
+      "id": 36,
       "page_id": "chislo_sudby_5",
       "title": "Число судьбы 5",
       "content_type": "info",
@@ -1152,7 +909,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 45,
+      "id": 37,
       "page_id": "chislo_sudby_6",
       "title": "Число судьбы 6",
       "content_type": "info",
@@ -1168,7 +925,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 46,
+      "id": 38,
       "page_id": "chislo_sudby_7",
       "title": "Число судьбы 7",
       "content_type": "info",
@@ -1184,7 +941,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 47,
+      "id": 39,
       "page_id": "chislo_sudby_8",
       "title": "Число судьбы 8",
       "content_type": "info",
@@ -1200,7 +957,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 48,
+      "id": 40,
       "page_id": "chislo_sudby_9",
       "title": "Число судьбы 9",
       "content_type": "info",
@@ -1216,7 +973,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 49,
+      "id": 41,
       "page_id": "chislo_sudby_11",
       "title": "Число судьбы 11",
       "content_type": "info",
@@ -1232,7 +989,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 50,
+      "id": 42,
       "page_id": "chislo_sudby_22",
       "title": "Число судьбы 22",
       "content_type": "info",
@@ -1248,7 +1005,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 51,
+      "id": 43,
       "page_id": "chislo_sudby_33",
       "title": "Число судьбы 33",
       "content_type": "info",
@@ -1264,7 +1021,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 52,
+      "id": 44,
       "page_id": "sovmestimost_1_i_1",
       "title": "Совместимость 1 и 1",
       "content_type": "info",
@@ -1280,7 +1037,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 53,
+      "id": 45,
       "page_id": "sovmestimost_2_i_2",
       "title": "Совместимость 2 и 2",
       "content_type": "info",
@@ -1296,7 +1053,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 54,
+      "id": 46,
       "page_id": "sovmestimost_3_i_3",
       "title": "Совместимость 3 и 3",
       "content_type": "info",
@@ -1312,7 +1069,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 55,
+      "id": 47,
       "page_id": "sovmestimost_4_i_4",
       "title": "Совместимость 4 и 4",
       "content_type": "info",
@@ -1328,7 +1085,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 56,
+      "id": 48,
       "page_id": "sovmestimost_5",
       "title": "Совместимость 5 в нумерологии",
       "content_type": "info",
@@ -1344,7 +1101,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 57,
+      "id": 49,
       "page_id": "sovmestimost_6_i_6",
       "title": "Совместимость 6 и 6",
       "content_type": "info",
@@ -1360,7 +1117,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 58,
+      "id": 50,
       "page_id": "sovmestimost_8_i_8",
       "title": "Совместимость 8 и 8",
       "content_type": "info",
@@ -1376,7 +1133,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 59,
+      "id": 51,
       "page_id": "sovmestimost_9_i_9",
       "title": "Совместимость 9 и 9",
       "content_type": "info",
@@ -1392,7 +1149,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 60,
+      "id": 52,
       "page_id": "sovmestimost_1_i_4",
       "title": "Совместимость 1 и 4",
       "content_type": "info",
@@ -1408,7 +1165,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 61,
+      "id": 53,
       "page_id": "sovmestimost_2_i_3",
       "title": "Совместимость 2 и 3",
       "content_type": "info",
@@ -1424,7 +1181,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 62,
+      "id": 54,
       "page_id": "sovmestimost_1_i_9",
       "title": "Совместимость 1 и 9",
       "content_type": "info",
@@ -1440,7 +1197,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 63,
+      "id": 55,
       "page_id": "sovmestimost_5_i_5",
       "title": "Совместимость 5 и 5",
       "content_type": "info",
@@ -1456,7 +1213,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 64,
+      "id": 56,
       "page_id": "sovmestimost_5_i_6",
       "title": "Совместимость 5 и 6",
       "content_type": "info",
@@ -1472,7 +1229,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 65,
+      "id": 57,
       "page_id": "sovmestimost_5_i_7",
       "title": "Совместимость 5 и 7",
       "content_type": "info",
@@ -1488,7 +1245,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 66,
+      "id": 58,
       "page_id": "sovmestimost_5_i_9",
       "title": "Совместимость 5 и 9",
       "content_type": "info",
@@ -1504,7 +1261,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 67,
+      "id": 59,
       "page_id": "sovmestimost_6_i_9",
       "title": "Совместимость 6 и 9",
       "content_type": "info",
@@ -1520,7 +1277,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 68,
+      "id": 60,
       "page_id": "sovmestimost_8_i_9",
       "title": "Совместимость 8 и 9",
       "content_type": "info",
@@ -1536,7 +1293,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 69,
+      "id": 61,
       "page_id": "sovmestimost_9_i_1",
       "title": "Совместимость 9 и 1",
       "content_type": "info",
@@ -1552,7 +1309,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 70,
+      "id": 62,
       "page_id": "numerologiya_na_chasakh_00_00",
       "title": "00:00 на часах",
       "content_type": "info",
@@ -1568,7 +1325,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 71,
+      "id": 63,
       "page_id": "numerologiya_na_chasakh_01_01",
       "title": "01:01 на часах",
       "content_type": "info",
@@ -1584,7 +1341,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 72,
+      "id": 64,
       "page_id": "numerologiya_na_chasakh_02_02",
       "title": "02:02 на часах",
       "content_type": "info",
@@ -1600,7 +1357,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 73,
+      "id": 65,
       "page_id": "numerologiya_na_chasakh_03_03",
       "title": "03:03 на часах",
       "content_type": "info",
@@ -1616,7 +1373,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 74,
+      "id": 66,
       "page_id": "numerologiya_na_chasakh_04_04",
       "title": "04:04 на часах",
       "content_type": "info",
@@ -1632,7 +1389,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 75,
+      "id": 67,
       "page_id": "numerologiya_na_chasakh_05_05",
       "title": "05:05 на часах",
       "content_type": "info",
@@ -1650,7 +1407,7 @@
       ]
     },
     {
-      "id": 76,
+      "id": 68,
       "page_id": "numerologiya_na_chasakh_06_06",
       "title": "06:06 на часах",
       "content_type": "info",
@@ -1666,7 +1423,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 77,
+      "id": 69,
       "page_id": "numerologiya_na_chasakh_07_07",
       "title": "07:07 на часах",
       "content_type": "info",
@@ -1682,7 +1439,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 78,
+      "id": 70,
       "page_id": "numerologiya_na_chasakh_08_08",
       "title": "08:08 на часах",
       "content_type": "info",
@@ -1698,7 +1455,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 79,
+      "id": 71,
       "page_id": "numerologiya_na_chasakh_09_09",
       "title": "09:09 на часах",
       "content_type": "info",
@@ -1714,7 +1471,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 80,
+      "id": 72,
       "page_id": "numerologiya_na_chasakh_10_10",
       "title": "10:10 на часах",
       "content_type": "info",
@@ -1730,7 +1487,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 81,
+      "id": 73,
       "page_id": "numerologiya_na_chasakh_11_11",
       "title": "11:11 на часах",
       "content_type": "info",
@@ -1746,7 +1503,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 82,
+      "id": 74,
       "page_id": "numerologiya_na_chasakh_12_12",
       "title": "12:12 на часах",
       "content_type": "info",
@@ -1762,7 +1519,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 83,
+      "id": 75,
       "page_id": "numerologiya_na_chasakh_13_13",
       "title": "13:13 на часах",
       "content_type": "info",
@@ -1778,7 +1535,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 84,
+      "id": 76,
       "page_id": "numerologiya_na_chasakh_14_14",
       "title": "14:14 на часах",
       "content_type": "info",
@@ -1794,7 +1551,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 85,
+      "id": 77,
       "page_id": "numerologiya_na_chasakh_15_15",
       "title": "15:15 на часах",
       "content_type": "info",
@@ -1810,7 +1567,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 86,
+      "id": 78,
       "page_id": "numerologiya_na_chasakh_16_16",
       "title": "16:16 на часах",
       "content_type": "info",
@@ -1826,7 +1583,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 87,
+      "id": 79,
       "page_id": "numerologiya_na_chasakh_17_17",
       "title": "17:17 на часах",
       "content_type": "info",
@@ -1842,7 +1599,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 88,
+      "id": 80,
       "page_id": "numerologiya_na_chasakh_18_18",
       "title": "18:18 на часах",
       "content_type": "info",
@@ -1858,7 +1615,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 89,
+      "id": 81,
       "page_id": "numerologiya_na_chasakh_19_19",
       "title": "19:19 на часах",
       "content_type": "info",
@@ -1874,7 +1631,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 90,
+      "id": 82,
       "page_id": "numerologiya_na_chasakh_20_20",
       "title": "20:20 на часах",
       "content_type": "info",
@@ -1890,7 +1647,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 91,
+      "id": 83,
       "page_id": "numerologiya_na_chasakh_21_21",
       "title": "21:21 на часах",
       "content_type": "info",
@@ -1906,7 +1663,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 92,
+      "id": 84,
       "page_id": "numerologiya_na_chasakh_22_22",
       "title": "22:22 на часах",
       "content_type": "info",
@@ -1922,7 +1679,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 93,
+      "id": 85,
       "page_id": "numerologiya_na_chasakh_23_23",
       "title": "23:23 на часах",
       "content_type": "info",
@@ -1938,7 +1695,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 94,
+      "id": 86,
       "page_id": "numerologiya_na_chasakh_12_21",
       "title": "12:21 на часах (зеркальное)",
       "content_type": "info",
@@ -1954,7 +1711,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 95,
+      "id": 87,
       "page_id": "numerologiya_na_chasakh_14_41",
       "title": "14:41 на часах (зеркальное)",
       "content_type": "info",
@@ -1970,7 +1727,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 96,
+      "id": 88,
       "page_id": "numerologiya_na_chasakh_13_31",
       "title": "13:31 на часах (зеркальное)",
       "content_type": "info",
@@ -1986,7 +1743,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 97,
+      "id": 89,
       "page_id": "numerologiya_na_chasakh_20_02",
       "title": "20:02 на часах (зеркальное)",
       "content_type": "info",
@@ -2002,7 +1759,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 98,
+      "id": 90,
       "page_id": "numerologiya_na_chasakh_23_32",
       "title": "23:32 на часах (зеркальное)",
       "content_type": "info",
@@ -2018,7 +1775,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 99,
+      "id": 91,
       "page_id": "numerologiya_na_chasakh_15_51",
       "title": "15:51 на часах (зеркальное)",
       "content_type": "info",
@@ -2034,7 +1791,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 100,
+      "id": 92,
       "page_id": "numerologiya_na_chasakh_21_12",
       "title": "21:12 на часах (зеркальное)",
       "content_type": "info",
@@ -2050,7 +1807,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 101,
+      "id": 93,
       "page_id": "numerologiya_na_chasakh_10_01",
       "title": "10:01 на часах (зеркальное)",
       "content_type": "info",
@@ -2066,7 +1823,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 102,
+      "id": 94,
       "page_id": "numerologiya_na_chasakh_22_33",
       "title": "22:33 на часах",
       "content_type": "info",
@@ -2082,7 +1839,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 103,
+      "id": 95,
       "page_id": "numerologiya_na_chasakh_11_22",
       "title": "11:22 на часах",
       "content_type": "info",
@@ -2098,7 +1855,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 104,
+      "id": 96,
       "page_id": "numerologiya_na_chasakh_22_11",
       "title": "22:11 на часах",
       "content_type": "info",
@@ -2114,7 +1871,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 105,
+      "id": 97,
       "page_id": "numerologiya_na_chasakh_22_44",
       "title": "22:44 на часах",
       "content_type": "info",
@@ -2130,7 +1887,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 106,
+      "id": 98,
       "page_id": "numerologiya_na_chasakh_22_55",
       "title": "22:55 на часах",
       "content_type": "info",
@@ -2146,7 +1903,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 107,
+      "id": 99,
       "page_id": "numerologiya_na_chasakh_11_33",
       "title": "11:33 на часах",
       "content_type": "info",
@@ -2162,7 +1919,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 108,
+      "id": 100,
       "page_id": "numerologiya_na_chasakh_11_44",
       "title": "11:44 на часах",
       "content_type": "info",
@@ -2178,7 +1935,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 109,
+      "id": 101,
       "page_id": "numerologiya_na_chasakh_11_55",
       "title": "11:55 на часах",
       "content_type": "info",
@@ -2194,7 +1951,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 110,
+      "id": 102,
       "page_id": "numerologiya_na_chasakh_02_22",
       "title": "02:22 на часах",
       "content_type": "info",
@@ -2210,7 +1967,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 111,
+      "id": 103,
       "page_id": "numerologiya_na_chasakh_22_02",
       "title": "22:02 на часах",
       "content_type": "info",
@@ -2226,7 +1983,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 112,
+      "id": 104,
       "page_id": "numerologiya_na_chasakh_05_50",
       "title": "05:50 на часах",
       "content_type": "info",
@@ -2242,7 +1999,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 113,
+      "id": 105,
       "page_id": "numerologiya_na_chasakh_05_55",
       "title": "05:55 на часах",
       "content_type": "info",
@@ -2258,7 +2015,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 114,
+      "id": 106,
       "page_id": "numerologiya_na_chasakh_04_40",
       "title": "04:40 на часах",
       "content_type": "info",
@@ -2274,7 +2031,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 115,
+      "id": 107,
       "page_id": "numerologiya_na_chasakh_04_44",
       "title": "04:44 на часах",
       "content_type": "info",
@@ -2290,7 +2047,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 116,
+      "id": 108,
       "page_id": "numerologiya_na_chasakh_14_44",
       "title": "14:44 на часах",
       "content_type": "info",
@@ -2306,7 +2063,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 117,
+      "id": 109,
       "page_id": "numerologiya_na_chasakh_03_33",
       "title": "03:33 на часах",
       "content_type": "info",
@@ -2322,7 +2079,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 118,
+      "id": 110,
       "page_id": "numerologiya_na_chasakh_13_33",
       "title": "13:33 на часах",
       "content_type": "info",
@@ -2338,7 +2095,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 119,
+      "id": 111,
       "page_id": "angelskie_chisla_111",
       "title": "Ангельское число 111",
       "content_type": "info",
@@ -2354,7 +2111,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 120,
+      "id": 112,
       "page_id": "angelskie_chisla_222",
       "title": "Ангельское число 222",
       "content_type": "info",
@@ -2370,7 +2127,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 121,
+      "id": 113,
       "page_id": "angelskie_chisla_333",
       "title": "Ангельское число 333",
       "content_type": "info",
@@ -2386,7 +2143,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 122,
+      "id": 114,
       "page_id": "angelskie_chisla_444",
       "title": "Ангельское число 444",
       "content_type": "info",
@@ -2402,7 +2159,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 123,
+      "id": 115,
       "page_id": "angelskie_chisla_555",
       "title": "Ангельское число 555",
       "content_type": "info",
@@ -2418,7 +2175,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 124,
+      "id": 116,
       "page_id": "angelskie_chisla_666",
       "title": "Ангельское число 666",
       "content_type": "info",
@@ -2434,7 +2191,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 125,
+      "id": 117,
       "page_id": "angelskie_chisla_777",
       "title": "Ангельское число 777",
       "content_type": "info",
@@ -2450,7 +2207,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 126,
+      "id": 118,
       "page_id": "angelskie_chisla_888",
       "title": "Ангельское число 888",
       "content_type": "info",
@@ -2466,7 +2223,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 127,
+      "id": 119,
       "page_id": "angelskie_chisla_999",
       "title": "Ангельское число 999",
       "content_type": "info",
@@ -2482,7 +2239,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 128,
+      "id": 120,
       "page_id": "angelskie_chisla_1111",
       "title": "Ангельское число 1111",
       "content_type": "info",
@@ -2498,7 +2255,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 129,
+      "id": 121,
       "page_id": "angelskie_chisla_2222",
       "title": "Ангельское число 2222",
       "content_type": "info",
@@ -2514,7 +2271,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 130,
+      "id": 122,
       "page_id": "angelskie_chisla_1212",
       "title": "Ангельское число 1212",
       "content_type": "info",
@@ -2530,7 +2287,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 131,
+      "id": 123,
       "page_id": "angelskie_chisla_1221",
       "title": "Ангельское число 1221",
       "content_type": "info",
@@ -2546,7 +2303,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 132,
+      "id": 124,
       "page_id": "angelskie_chisla_1010",
       "title": "Ангельское число 1010",
       "content_type": "info",
@@ -2562,7 +2319,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 133,
+      "id": 125,
       "page_id": "angelskie_chisla_1717",
       "title": "Ангельское число 1717",
       "content_type": "info",
@@ -2578,7 +2335,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 134,
+      "id": 126,
       "page_id": "angelskie_chisla_1313",
       "title": "Ангельское число 1313",
       "content_type": "info",
@@ -2594,7 +2351,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 135,
+      "id": 127,
       "page_id": "angelskie_chisla_1414",
       "title": "Ангельское число 1414",
       "content_type": "info",
@@ -2610,7 +2367,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 136,
+      "id": 128,
       "page_id": "angelskie_chisla_1515",
       "title": "Ангельское число 1515",
       "content_type": "info",
@@ -2626,7 +2383,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 137,
+      "id": 129,
       "page_id": "angelskie_chisla_1616",
       "title": "Ангельское число 1616",
       "content_type": "info",
@@ -2642,7 +2399,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 138,
+      "id": 130,
       "page_id": "angelskie_chisla_1818",
       "title": "Ангельское число 1818",
       "content_type": "info",
@@ -2658,7 +2415,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 139,
+      "id": 131,
       "page_id": "angelskie_chisla_1919",
       "title": "Ангельское число 1919",
       "content_type": "info",
@@ -2674,7 +2431,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 140,
+      "id": 132,
       "page_id": "angelskie_chisla_2121",
       "title": "Ангельское число 2121",
       "content_type": "info",
@@ -2690,7 +2447,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 141,
+      "id": 133,
       "page_id": "angelskie_chisla_2112",
       "title": "Ангельское число 2112",
       "content_type": "info",
@@ -2706,7 +2463,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 142,
+      "id": 134,
       "page_id": "angelskie_chisla_2323",
       "title": "Ангельское число 2323",
       "content_type": "info",
@@ -2722,7 +2479,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 143,
+      "id": 135,
       "page_id": "angelskie_chisla_1331",
       "title": "Ангельское число 1331",
       "content_type": "info",
@@ -2738,7 +2495,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 144,
+      "id": 136,
       "page_id": "angelskie_chisla_1441",
       "title": "Ангельское число 1441",
       "content_type": "info",
@@ -2754,7 +2511,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 145,
+      "id": 137,
       "page_id": "angelskie_chisla_1551",
       "title": "Ангельское число 1551",
       "content_type": "info",
@@ -2770,7 +2527,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 146,
+      "id": 138,
       "page_id": "angelskie_chisla_2002",
       "title": "Ангельское число 2002",
       "content_type": "info",
@@ -2786,7 +2543,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 147,
+      "id": 139,
       "page_id": "angelskie_chisla_1001",
       "title": "Ангельское число 1001",
       "content_type": "info",
@@ -2802,7 +2559,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 148,
+      "id": 140,
       "page_id": "angelskie_chisla_1444",
       "title": "Ангельское число 1444",
       "content_type": "info",
@@ -2818,7 +2575,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 149,
+      "id": 141,
       "page_id": "angelskie_chisla_2211",
       "title": "Ангельское число 2211",
       "content_type": "info",
@@ -2834,7 +2591,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 150,
+      "id": 142,
       "page_id": "angelskie_chisla_2244",
       "title": "Ангельское число 2244",
       "content_type": "info",
@@ -2850,7 +2607,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 151,
+      "id": 143,
       "page_id": "angelskie_chisla_2255",
       "title": "Ангельское число 2255",
       "content_type": "info",
@@ -2866,7 +2623,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 152,
+      "id": 144,
       "page_id": "angelskie_chisla_2233",
       "title": "Ангельское число 2233",
       "content_type": "info",
@@ -2882,7 +2639,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 153,
+      "id": 145,
       "page_id": "angelskie_chisla_2332",
       "title": "Ангельское число 2332",
       "content_type": "info",
@@ -2898,7 +2655,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 154,
+      "id": 146,
       "page_id": "angelskie_chisla_0101",
       "title": "Ангельское число 0101",
       "content_type": "info",
@@ -2914,7 +2671,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 155,
+      "id": 147,
       "page_id": "angelskie_chisla_0202",
       "title": "Ангельское число 0202",
       "content_type": "info",
@@ -2930,7 +2687,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 156,
+      "id": 148,
       "page_id": "angelskie_chisla_0303",
       "title": "Ангельское число 0303",
       "content_type": "info",
@@ -2946,7 +2703,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 157,
+      "id": 149,
       "page_id": "angelskie_chisla_0404",
       "title": "Ангельское число 0404",
       "content_type": "info",
@@ -2962,7 +2719,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 158,
+      "id": 150,
       "page_id": "angelskie_chisla_0505",
       "title": "Ангельское число 0505",
       "content_type": "info",
@@ -2978,7 +2735,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 159,
+      "id": 151,
       "page_id": "angelskie_chisla_0606",
       "title": "Ангельское число 0606",
       "content_type": "info",
@@ -2994,7 +2751,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 160,
+      "id": 152,
       "page_id": "angelskie_chisla_0707",
       "title": "Ангельское число 0707",
       "content_type": "info",
@@ -3010,7 +2767,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 161,
+      "id": 153,
       "page_id": "angelskie_chisla_0808",
       "title": "Ангельское число 0808",
       "content_type": "info",
@@ -3026,7 +2783,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 162,
+      "id": 154,
       "page_id": "angelskie_chisla_0909",
       "title": "Ангельское число 0909",
       "content_type": "info",
@@ -3042,7 +2799,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 163,
+      "id": 155,
       "page_id": "angelskie_chisla_0555",
       "title": "Ангельское число 0555",
       "content_type": "info",
@@ -3058,7 +2815,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 164,
+      "id": 156,
       "page_id": "angelskie_chisla_0550",
       "title": "Ангельское число 0550",
       "content_type": "info",
@@ -3074,7 +2831,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 165,
+      "id": 157,
       "page_id": "angelskie_chisla_0444",
       "title": "Ангельское число 0444",
       "content_type": "info",
@@ -3090,7 +2847,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 166,
+      "id": 158,
       "page_id": "angelskie_chisla_1122",
       "title": "Ангельское число 1122",
       "content_type": "info",
@@ -3106,7 +2863,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 167,
+      "id": 159,
       "page_id": "angelskie_chisla_1133",
       "title": "Ангельское число 1133",
       "content_type": "info",
@@ -3122,7 +2879,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 168,
+      "id": 160,
       "page_id": "angelskie_chisla_1144",
       "title": "Ангельское число 1144",
       "content_type": "info",
@@ -3138,7 +2895,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 169,
+      "id": 161,
       "page_id": "angelskie_chisla_1155",
       "title": "Ангельское число 1155",
       "content_type": "info",
@@ -3154,7 +2911,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 170,
+      "id": 162,
       "page_id": "angelskie_chisla_1222",
       "title": "Ангельское число 1222",
       "content_type": "info",
@@ -3170,7 +2927,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 171,
+      "id": 163,
       "page_id": "angelskie_chisla_1333",
       "title": "Ангельское число 1333",
       "content_type": "info",
@@ -3186,7 +2943,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 172,
+      "id": 164,
       "page_id": "angelskie_chisla_1555",
       "title": "Ангельское число 1555",
       "content_type": "info",
@@ -3202,7 +2959,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 173,
+      "id": 165,
       "page_id": "angelskie_chisla_2333",
       "title": "Ангельское число 2333",
       "content_type": "info",
@@ -3218,7 +2975,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 174,
+      "id": 166,
       "page_id": "angelskie_chisla_7777",
       "title": "Ангельское число 7777",
       "content_type": "info",
@@ -3234,7 +2991,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 175,
+      "id": 167,
       "page_id": "angelskie_chisla_8888",
       "title": "Ангельское число 8888",
       "content_type": "info",
@@ -3250,7 +3007,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 176,
+      "id": 168,
       "page_id": "angelskie_chisla_9999",
       "title": "Ангельское число 9999",
       "content_type": "info",
@@ -3266,7 +3023,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 177,
+      "id": 169,
       "page_id": "angelskie_chisla_6666",
       "title": "Ангельское число 6666",
       "content_type": "info",
@@ -3282,7 +3039,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 178,
+      "id": 170,
       "page_id": "numerologiya_mesyaca_yanvar",
       "title": "Нумерология январь",
       "content_type": "info",
@@ -3298,7 +3055,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 179,
+      "id": 171,
       "page_id": "numerologiya_mesyaca_fevral",
       "title": "Нумерология февраль",
       "content_type": "info",
@@ -3314,7 +3071,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 180,
+      "id": 172,
       "page_id": "numerologiya_mesyaca_mart",
       "title": "Нумерология март",
       "content_type": "info",
@@ -3330,7 +3087,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 181,
+      "id": 173,
       "page_id": "numerologiya_mesyaca_aprel",
       "title": "Нумерология апрель",
       "content_type": "info",
@@ -3346,7 +3103,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 182,
+      "id": 174,
       "page_id": "numerologiya_mesyaca_maj",
       "title": "Нумерология май",
       "content_type": "info",
@@ -3362,7 +3119,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 183,
+      "id": 175,
       "page_id": "numerologiya_mesyaca_iyun",
       "title": "Нумерология июнь",
       "content_type": "info",
@@ -3378,7 +3135,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 184,
+      "id": 176,
       "page_id": "numerologiya_mesyaca_iyul",
       "title": "Нумерология июль",
       "content_type": "info",
@@ -3394,7 +3151,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 185,
+      "id": 177,
       "page_id": "numerologiya_mesyaca_avgust",
       "title": "Нумерология август",
       "content_type": "info",
@@ -3410,7 +3167,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 186,
+      "id": 178,
       "page_id": "numerologiya_mesyaca_sentyabr",
       "title": "Нумерология сентябрь",
       "content_type": "info",
@@ -3426,7 +3183,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 187,
+      "id": 179,
       "page_id": "numerologiya_mesyaca_oktyabr",
       "title": "Нумерология октябрь",
       "content_type": "info",
@@ -3442,7 +3199,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 188,
+      "id": 180,
       "page_id": "numerologiya_mesyaca_noyabr",
       "title": "Нумерология ноябрь",
       "content_type": "info",
@@ -3458,7 +3215,7 @@
       "cluster_keywords": []
     },
     {
-      "id": 189,
+      "id": 181,
       "page_id": "numerologiya_mesyaca_dekabr",
       "title": "Нумерология декабрь",
       "content_type": "info",
