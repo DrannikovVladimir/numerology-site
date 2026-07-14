@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import BlockRenderer, { Block } from "@/components/blocks/BlockRenderer";
+
+export const metadata: Metadata = {
+  title: "Тестовая страница",
+  robots: { index: false, follow: false },
+};
 
 // Тестовая страница — по одному примеру каждого из 12 типов блоков,
 // в порядке, предписанном skill_07_html_components.md
