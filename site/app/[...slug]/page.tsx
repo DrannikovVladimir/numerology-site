@@ -10,6 +10,18 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import { buildJsonLd } from "@/lib/jsonld";
 import plannedUrls from "@/content/planned-urls.json";
 
+const HUBS = [
+  { href: "/numerologiya/", label: "Нумерология" },
+  { href: "/chislo-sudby/", label: "Число судьбы" },
+  { href: "/matrica-sudby/", label: "Матрица судьбы" },
+  { href: "/kvadrat-pifagora/", label: "Квадрат Пифагора" },
+  { href: "/sovmestimost/", label: "Совместимость" },
+  { href: "/numerologiya-imeni/", label: "Нумерология имени" },
+  { href: "/numerologiya-na-chasakh/", label: "Нумерология на часах" },
+  { href: "/numerologiya-mesyaca/", label: "Нумерология месяца" },
+  { href: "/angelskie-chisla/", label: "Ангельские числа" },
+];
+
 interface Article {
   page_id: string;
   url?: string;
@@ -59,13 +71,26 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   const article = await getArticleBySlug(params.slug);
 
   if (!article) {
-    return {};
+    const url = "/" + params.slug.join("/") + "/";
+
+    if (url in plannedUrls) {
+      return {
+        title: "Страница в разработке",
+        robots: { index: false, follow: false },
+      };
+    }
+
+    return {
+      title: "Страница не найдена",
+      robots: { index: false, follow: false },
+    };
   }
 
   return {
     title: article.meta.title,
     description: article.meta.description,
     keywords: article.primary_keyword,
+    robots: { index: true, follow: true },
     alternates: {
       canonical: `https://example.com${article.url}`,
     },
@@ -108,6 +133,21 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           >
             На главную
           </Link>
+
+          <section className="mt-12 w-full">
+            <h2 className="mb-4 text-xl font-semibold text-ink">Возможно, вас заинтересует:</h2>
+            <nav className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {HUBS.map((hub) => (
+                <Link
+                  key={hub.href}
+                  href={hub.href}
+                  className="text-sm text-inkMuted hover:text-terracotta"
+                >
+                  {hub.label}
+                </Link>
+              ))}
+            </nav>
+          </section>
         </main>
       );
     }

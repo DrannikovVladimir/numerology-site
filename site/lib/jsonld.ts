@@ -3,6 +3,7 @@ const SITE_NAME = "Нумерология";
 
 interface ArticleForJsonLd {
   url?: string;
+  image: string;
   meta: { h1: string; description: string };
   nav_title?: string;
   page_type: string;
@@ -46,6 +47,7 @@ export function buildJsonLd(article: ArticleForJsonLd): object {
     "@id": `${pageUrl}#article`,
     headline: article.meta.h1,
     description: article.meta.description,
+    image: `${DOMAIN}${article.image}`,
     url: pageUrl,
     inLanguage: "ru",
     datePublished,
