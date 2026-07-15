@@ -9,6 +9,7 @@ import TableOfContents from "@/components/TableOfContents";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { buildJsonLd } from "@/lib/jsonld";
 import plannedUrls from "@/content/planned-urls.json";
+export const revalidate = 86400;
 
 const HUBS = [
   { href: "/numerologiya/", label: "Нумерология" },
@@ -65,6 +66,13 @@ interface ArticlePageProps {
   params: {
     slug: string[];
   };
+}
+
+// Пустой массив — на этапе сборки конкретные slug'и неизвестны.
+// dynamicParams остаётся true по умолчанию: Next.js рендерит и кеширует
+// каждую новую страницу при первом запросе (on-demand ISR).
+export async function generateStaticParams() {
+  return [];
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {

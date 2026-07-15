@@ -39,7 +39,7 @@ export function buildJsonLd(article: ArticleForJsonLd): object {
   const publisher = {
     "@type": "Organization",
     name: SITE_NAME,
-    logo: { "@type": "ImageObject", url: `${DOMAIN}/logo.png` },
+    logo: { "@type": "ImageObject", url: `${DOMAIN}/images/logo.png` },
   };
 
 const articleNode: Record<string, unknown> = {

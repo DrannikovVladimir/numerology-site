@@ -1,8 +1,15 @@
+import fs from "fs/promises";
+import path from "path";
 import type { MetadataRoute } from "next";
-import plannedUrls from "@/content/planned-urls.json";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const published = (Object.entries(plannedUrls) as [string, boolean][])
+export const revalidate = 3600;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const filePath = path.join(process.cwd(), "content/planned-urls.json");
+  const raw = await fs.readFile(filePath, "utf-8");
+  const plannedUrls = JSON.parse(raw) as Record<string, boolean>;
+
+  const published = Object.entries(plannedUrls)
     .filter(([, published]) => published)
     .map(([url]) => ({
       url: `https://example.com${url}`,

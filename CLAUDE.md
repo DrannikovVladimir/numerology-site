@@ -2,299 +2,138 @@
 
 ## Проект
 Нумерологический сайт на русском языке.
-Контент — JSON-статьи, рендерятся динамически через Next.js.
+Контент — JSON-статьи, рендерятся динамически через Next.js с ISR-кешированием.
 
 ## Структура репозитория
 ```
-/site/                        ← Next.js 14 сайт (здесь вся разработка)
+/site/                        ← Next.js 14 сайт
   /app/
-    page.tsx                  ← главная страница — см. подробный список секций ниже
+    page.tsx                  ← главная страница — структура секций см. docs/SITE.md
     layout.tsx                ← Header/Footer, bg-parchment, favicon, metadata
     not-found.tsx             ← кастомная 404 (со ссылками на хабы)
-    sitemap.ts                ← генерация /sitemap.xml — статический роут,
-                                 пересобирается только при npm run build
-    robots.ts                 ← генерация /robots.txt
-    /[...slug]/page.tsx       ← catch-all роут статей — динамический роут,
-                                 читает JSON из content/published/ в момент запроса
+    sitemap.ts                ← /sitemap.xml, fs.readFile + ISR (revalidate 3600)
+    robots.ts                 ← /robots.txt
+    /[...slug]/page.tsx       ← catch-all роут статей, on-demand ISR
+                                 (revalidate 86400) — см. docs/ARCHITECTURE.md
     /test-blocks/page.tsx     ← тестовая страница со всеми типами блоков
   /components/
-    Header.tsx                ← sticky, бургер-меню (полный список хабов)
-    Footer.tsx                ← сетка ссылок на 9 хабов
-    Breadcrumbs.tsx            ← хлебные крошки (2 уровня hub, 3 уровня spoke)
-    TableOfContents.tsx       ← оглавление из H2-блоков статьи
-    ScrollToTop.tsx           ← кнопка возврата наверх (клиентский)
-    DestinyCalculator.tsx     ← live-калькулятор числа судьбы (главная), учитывает мастер-числа 11/22/33
-    PsychomatrixCalculator.tsx ← live-калькулятор матрицы судьбы/квадрата Пифагора (главная)
-                                  формула — точное зеркало calcPythagoreanMatrix() из бота
-                                  (src/bot/interpretations/karma/karma.js), править синхронно
-    NumberWheel.tsx            ← инфографика «колесо чисел» 1-9 (главная), координаты точек считаются
-                                  тригонометрией в коде, не хардкодятся вручную
+    Header.tsx, Footer.tsx, Breadcrumbs.tsx, TableOfContents.tsx, ScrollToTop.tsx
+    DestinyCalculator.tsx, PsychomatrixCalculator.tsx ← формулы — зеркало бота
+      (src/bot/interpretations/karma/karma.js), править синхронно
+    NumberWheel.tsx            ← координаты точек считаются в коде, не хардкодятся
     /blocks/
-      Paragraph.tsx           ← поддерживает Markdown-ссылки [текст](url)
-      H2.tsx, H3.tsx          ← якоря через slugify, hover-ссылка #
-      Fact.tsx, Quote.tsx, Table.tsx, List.tsx
-      Callout.tsx             ← варианты: tip, warning, info, important, practice
-      FactRow.tsx, Cta.tsx, Faq.tsx, Links.tsx
-      Image.tsx               ← next/image с caption
-      BlockRenderer.tsx       ← 13 типов блоков, здесь же определены TypeScript-типы
-                                  всех блоков (CtaBlock и т.д.) — источник истины по схеме
+      13 компонентов + BlockRenderer.tsx — источник истины по TypeScript-схеме блоков
   /lib/
-    slugify.ts                ← утилита для генерации id из текста
-    jsonld.ts                 ← сборка JSON-LD (BreadcrumbList, Article, FAQPage);
-                                  ArticleForJsonLd.image опционален
+    slugify.ts
+    jsonld.ts                 ← сборка JSON-LD; ArticleForJsonLd.image опционален
   /content/
-    planned-urls.json         ← реестр {url: true/false} — опубликована ли статья
+    planned-urls.json         ← реестр {url: true/false}, НЕ в git (см. ниже)
   /public/
-    favicon.ico, favicon.svg, favicon-96x96.png
-    apple-touch-icon.png
-    web-app-manifest-192x192.png, web-app-manifest-512x512.png
-    site.webmanifest
-    /images/hub/              ← изображения для hub-статей
-    /images/home/             ← иконки для блока «Что расскажет о вас нумерология» (главная)
-  next.config.mjs             ← trailingSlash: true — обязательна, все ссылки на сайте
-                                  построены с завершающим "/"; без этой настройки прод-сборка
-                                  (npm run build && npm start) отдаёт 308 redirect на каждой
-                                  статье, в npm run dev проблема не проявляется
+    favicon*, apple-touch-icon.png, web-app-manifest-*.png, site.webmanifest
+    /images/hub/, /images/home/, /images/logo.png
+  next.config.mjs             ← trailingSlash: true (обязательна)
+  package.json                ← включает sharp
   tailwind.config.ts          ← палитра "тёплый пергамент"
 
-/content/                     ← JSON-статьи и изображения (вне /site/)
-  semantic_clusters.json      ← реестр кластеров, актуальное число — см. meta.total в самом файле
-  anchors.json                ← словарь анкоров для linkbuilder.js, пересобирается
-                                 автоматически (build-anchors.js), руками не редактируется
-  /published/                 ← 34 статьи (9 hub + 25 spoke, все 9 хабов опубликованы) —
-                                 см. planned-urls.json
-  /pending/                   ← очередь на публикацию, забирается publish.js
-                                 (FIFO по mtime файла, не по created_at внутри JSON)
-  /error/                     ← не используется пока
+/content/
+  semantic_clusters.json      ← реестр кластеров, В GIT, редактируется только вручную
+  anchors.json                ← НЕ в git, пересобирается build-anchors.js
+  /pending/, /published/, /error/  ← НЕ в git, см. «Git и синхронизация»
 
 /autopilot/
-  publish.js                 ← публикатор: pending → published, проставляет
-                                 date_published/date_modified, вызывает
-                                 update-planned-urls.js в конце. CLI: --count N,
-                                 --dry-run. Telegram-уведомления не реализованы
-  update-planned-urls.js      ← обновляет site/content/planned-urls.json на основе
-                                 того, что реально лежит в content/published/
-  linkbuilder.js              ← автоматическая простановка контекстных ссылок (CLI: --file/--dir/--dry-run)
-  build-anchors.js            ← сборка content/anchors.json, вызывается linkbuilder.js автоматически
-  /prompts/
-    prompt_02_onpage.md       ← генератор карточки кластера
-    prompt_03_generator.md    ← генератор статьи
-    /skills/
-      skill_01_seo_role.md
-      skill_02_tov_numerology.md
-      skill_03_content_rules.md
-      skill_06_checklist.md
-      skill_07_html_components.md
-      skill_08_jsonld_meta.md
-      skill_05_base.md        ← базовые правила для всех spoke-страниц
-      /hub/
-        skill_04_structure_hub.md   ← содержит правило-исключение про перелинковку
-                                       хабов без собственных spoke (кв. Пифагора → матрица судьбы)
-        skill_04b_structure_standalone.md
-      /spoke/
-        skill_05_chislo-sudby-1-9.md
-        skill_05_chislo-sudby-mastery.md  ← мастер-числа 11, 22, 33 — готов
-        skill_05_sovmestimost.md
-        skill_05_chasy-00-23.md
-        skill_05_angelskie-chisla.md
-        skill_05_mesyacy.md
-        skill_05_matrica-sudby.md         ← методика матрицы судьбы, 9 spoke (по ячейкам),
-                                              линии — врезки/раздел хаба, не отдельные URL
+  publish.js                  ← pending → published, CLI: --count N, --dry-run
+  update-planned-urls.js      ← пересобирает planned-urls.json из published/
+  linkbuilder.js               ← простановка контекстных ссылок (--file/--dir/--dry-run)
+  build-anchors.js            ← сборка anchors.json
+  validate-clusters.js        ← проверка semantic_clusters.json (дефис/подчёркивание
+                                 в url, дубли id, обязательные поля) — запускать
+                                 перед коммитом
+  /prompts/                   ← prompt_02_onpage.md, prompt_03_generator.md, /skills/
 
-/docs/                        ← документация проекта
+/scripts/
+  sync-content.sh              ← ЗАПЛАНИРОВАН: rsync content/pending/ на сервер
+
+/docs/                         ← документация проекта
+.gitignore                     ← ЗАПЛАНИРОВАН, см. docs/DEPLOYMENT.md
 ```
 
+## Git и синхронизация с VPS
+Git отслеживает только код (`site/`, `autopilot/`-скрипты, `docs/`,
+`content/semantic_clusters.json`). Файлы, которые мутируют скрипты на
+сервере (`content/pending/`, `content/published/`, `content/anchors.json`,
+`site/content/planned-urls.json`), исключены из git и доставляются
+отдельно через `rsync`. Подробности и обоснование — `docs/ARCHITECTURE.md`,
+раздел «Два независимых канала синхронизации»; пошаговая настройка —
+`docs/DEPLOYMENT.md`.
+
 ## Стек сайта
-- Next.js 14 (App Router)
-- Tailwind CSS
-- TypeScript
+Next.js 14 (App Router), Tailwind CSS, TypeScript.
 
 ## Цветовая палитра ("тёплый пергамент")
 ```
-parchment:  '#F2E4C9'  фон страницы
-cream:      '#FBF3E3'  фон карточек
-sand:       '#E0C9A0'  рамки
-terracotta: { DEFAULT: '#7A3418', light: '#F0D5C4' }  основной акцент (CTA, fact)
-teal:       { DEFAULT: '#1B4D4A', light: '#CDE8E4' }  второй акцент (quote, h2, callout info)
-ink:        '#3D2B1F'  текст основной
-inkMuted:   '#6B5A47'  текст вторичный
+parchment: '#F2E4C9'   cream: '#FBF3E3'   sand: '#E0C9A0'
+terracotta: '#7A3418' (light '#F0D5C4')  — акцент CTA/fact
+teal: '#1B4D4A' (light '#CDE8E4')        — акцент quote/h2/callout info
+ink: '#3D2B1F'   inkMuted: '#6B5A47'
 ```
 
 ## Готово (текущий статус)
-
-### Сайт
-- Базовая структура Next.js 14, TypeScript, Tailwind, палитра настроена
-- 13 компонентов блоков (paragraph, h2, h3, fact, quote, table, list,
-  callout, fact_row, cta, faq, links, image) + BlockRenderer
-- Callout поддерживает варианты: tip, warning, info, important, practice
-- Header (sticky, бургер-меню с полным списком хабов) и Footer
-- Хлебные крошки (2 уровня для hub, 3 для spoke)
-- Оглавление из H2-блоков статьи
-- Кнопка ScrollToTop
-- Якоря на H2/H3 заголовках через slugify
-- Поддержка Markdown-ссылок [текст](url) в параграфах
-- Favicon и иконки для всех платформ
-- Прод-сборка (npm run build && npm start) проверена целиком: компилируется чисто,
-  все статьи отдают 200 без редиректов, sitemap.xml корректно статичен
-
-### Главная страница
-Полноценный лендинг, сверху вниз:
-- **Hero** — H1, подзаголовок, 2 CTA (бот / "Изучить основы"), декоративная
-  картинка справа (компас или свиток — Flux, промпты см. историю чата)
-- **Матрица судьбы** — тёмный акцент-блок (bg-ink), live-калькулятор психоматрицы
-  (`PsychomatrixCalculator.tsx`), ссылка на "квадрат Пифагора" как второе имя метода
-- **Разделы нумерологии** — заголовок с кластерным ключом + вступление + сетка 9 хабов,
-  у каждой карточки своя иконка lucide-react
-- **Что такое числа в нумерологии** — 3 тезиса с иконками (Hash/Calendar/Compass),
-  подзаголовок с кластерными ключами
-- **Рассчитать число судьбы прямо сейчас** — тёмный акцент-блок (bg-teal), live-калькулятор
-  (`DestinyCalculator.tsx`), учитывает мастер-числа 11/22/33, ведёт на бота
-- **Что расскажет о вас нумерология** — 6 тезисов (характер, предназначение,
-  совместимость, деньги, любовь, здоровье) с крупными PNG-иконками (Flux,
-  промпты в истории чата, лежат в site/public/images/home/)
-- **Девять чисел — девять характеров** — колесо чисел 1-9 (`NumberWheel.tsx`),
-  каждое число кликабельно → /chislo-sudby/N/
-- **CTA на канал** — `Cta.tsx` с `position="mid_article_channel"`
-- **Зеркальные числа на часах** — превью 00:00 / 11:11 / 22:22, ссылка на хаб часов
-- Финальный CTA перед футером — сознательно отложен, ещё не сделан
-
-### Роутинг и SEO
-- Catch-all роут /[...slug]/page.tsx:
-  - читает статью из content/published/{slug}.json в момент запроса (динамический роут)
-  - если файла нет, но url в planned-urls.json → "страница в разработке"
-    (свой title "Страница в разработке", robots noindex, список хабов как на 404)
-  - если url нигде не числится → кастомная 404 (not-found.tsx) со ссылками на хабы
-- robots — задаётся явно в каждом случае, дефолт в layout.tsx на robots не влияет:
-  - реальная статья → index, follow
-  - "страница в разработке", 404, /test-blocks/ → noindex, nofollow
-- layout.tsx: дефолтные title/description ("Нумерология" + короткое описание)
-  вместо мусора из create-next-app — используются только если страница
-  не задаёт свои метаданные
-- Open Graph + Twitter Card теги на всех страницах
-- Canonical URL и все внутренние ссылки построены с завершающим "/" —
-  next.config.mjs задаёт trailingSlash: true; без неё прод-сборка редиректит (308)
-  версию со слэшем на версию без него на каждой статье
-- JSON-LD разметка (BreadcrumbList + Article + FAQPage при ≥2 вопросах)
-  - Article: image — опциональное поле (`ArticleForJsonLd.image?`), добавляется в
-    разметку только если `article.image` заполнен (статья без картинки — легальный
-    сценарий по AUTOPILOT.md)
-  - Article: datePublished/dateModified — из article.date_published/date_modified,
-    проставляются автоматически скриптом autopilot/publish.js в момент публикации
-- sitemap.xml — статический роут, читает published-статьи через planned-urls.json,
-  фиксируется на этапе npm run build. Новые публикации не появляются в sitemap
-  без пересборки сайта — подтверждённое поведение, не баг (см. AUTOPILOT.md)
-
-### Контент
-- 34 статьи опубликовано в content/published/ (9 hub + 25 spoke), все 9 hub-страниц
-  опубликованы — см. planned-urls.json
-- Spoke опубликованы по сериям: числа судьбы (1, 2, 3, 11, 22, 33), совместимость
-  (1-1, 2-2, 3-3, 4-4, 5-5, 1-9), часы (00-00, 01-01, 02-02, 22-44), ангельские числа
-  (1111, 1212, 1313, 1616, 1717, 2222), месяцы (январь, февраль, ноябрь) — hub→spoke
-  цикл проверен end-to-end, включая прод-сборку
-- «Квадрат Пифагора» — hub-статья опубликована в content/published/
-  (есть известный баг — дубль H2-блока с разным lead, см. «Не сделано»)
-- «Матрица судьбы» — hub-статья опубликована в content/published/
-  (подтверждено прогоном linkbuilder.js), 9 spoke по ячейкам ещё не написаны
-  (методика расчёта и трактовки готова, см. «Не сделано»)
-- Изображения для всех 9 хабов в site/public/images/hub/
-- CTA-правило: 2 CTA на бота (разные формулировки) + 1 на канал (mid_article_channel)
-- nav_title поле в каждой статье — короткое название для крошек
-- Текст хлебной крошки на хаб (internal_links.up.anchor) генерируется заново в
-  каждой статье промптом 2/3, не наследуется от nav_title хаба — регистр
-  непоследователен между сериями (например «числа судьбы» vs «Ангельские числа»)
-
-### Контентная система (промпты и скилы)
-- prompt_02_onpage.md — генерирует карточку кластера (JSON-скелет)
-- prompt_03_generator.md — генерирует финальную статью по карточке
-- Скилы разделены на базовые и серийные:
-  - skill_05_base.md — общие правила для всех spoke
-  - /spoke/ папка — отдельный файл для каждой серии с уникальными блоками
-- Протестированные серии: chislo-sudby-1-9, sovmestimost, chasy-00-23, angelskie-chisla, mesyacy
-- Контекстные ссылки в тексте — правило в prompt_03, приоритет опубликованным URL
-
-### Скрипты
-- node autopilot/update-planned-urls.js — обновляет planned-urls.json
-  (publish.js вызывает его автоматически в конце своей работы; отдельный запуск
-  нужен только вне цикла публикации)
-- node autopilot/publish.js [--count N] [--dry-run] — публикатор: берёт N старейших
-  файлов из content/pending/ (FIFO по mtime), проставляет
-  date_published/date_modified, перекладывает в content/published/. Не вызывает
-  linkbuilder.js автоматически — линковка отдельный шаг:
-  `node autopilot/linkbuilder.js --file content/published/{имя}.json`
+- Сайт: 13 типов блоков, Header/Footer, breadcrumbs, TOC, SEO/JSON-LD,
+  прод-сборка проверена целиком. Структура страниц, включая главную —
+  `docs/SITE.md`
+- **Кеширование (ISR)**: статьи — `revalidate 86400`, sitemap —
+  `revalidate 3600`, оба поверх `fs.readFile` (не статический импорт).
+  Механизм и почему `generateStaticParams` обязателен — `docs/ARCHITECTURE.md`
+- `sharp` установлен, логотип подключён (хедер — SVG-лабиринт, JSON-LD —
+  `/images/logo.png`)
+- Автопилот: `publish.js`, `linkbuilder.js`, `update-planned-urls.js`,
+  `build-anchors.js`, `validate-clusters.js` реализованы и проверены
+  end-to-end вручную. Подробности — `docs/AUTOPILOT.md`
+- Контентная система: `prompt_02_onpage.md`/`prompt_03_generator.md` +
+  skill-файлы. `hub_id` и анкор хлебной крошки на хаб теперь имеют явные
+  правила в Промпте 2 (конвертация подчёркивания в дефис; анкор берётся
+  дословно из `title` hub-кластера) — см. `docs/CONTENT.md`
+- Формат JSON статьи и правила хранения — `docs/STORAGE.md`
 
 ## Не сделано / следующие шаги
-
-**Прочее:**
-- Зонирование linkbuilder.js по H3 вместо H2 + общий потолок ссылок на
-  статью — решение не принято, см. autopilot/AUTOPILOT.md, раздел
-  «linkbuilder.js», «Известные ограничения»
-- Регистр текста хлебной крошки хаба непоследователен между статьями
-  (internal_links.up.anchor генерируется заново промптом, не наследует
-  nav_title хаба) — чинить в промпте/скиле генерации
-- hub_id/page_id иногда генерируются с подчёркиванием вместо дефиса — на
-  breadcrumbs не влияет (строятся из URL статьи через Breadcrumbs.tsx, не
-  из hub_id напрямую), но расходится с правилом «hub_id всегда через дефисы»
-- Логотип в хедере — сейчас текст, нужна иконка лабиринта (SvgLabyrinth уже
-  используется в CTA-блоках статей, в хедере не подключена)
-- Логотип для JSON-LD (Organization/Article publisher.logo) — путь /images/logo.png,
-  файла нет; нужно решить, какой файл использовать (см. public/, есть
-  web-app-manifest-512x512.png — подходит по размеру)
-- Деплой — VPS, Nginx, PM2, реальный домен вместо example.com
-- Автопилот — generate.js (батч-генерация), telegram.js (уведомления),
-  validator.js, storage.js — не реализованы. publish.js и linkbuilder.js
-  реализованы и проверены end-to-end вручную (см. AUTOPILOT.md)
-- Финальный CTA-блок перед футером на главной — сознательно отложен
-- Изображения для главной ещё не сгенерированы и не положены на диск:
-  hero (`site/public/images/hero/hero-visual.png`) и 6 иконок блока
-  «Что расскажет о вас нумерология» (`site/public/images/home/icon-*.png`) —
-  промпты под Flux см. в истории чата, без файлов на этих страницах будут
-  битые картинки (сайт не упадёт, просто пусто)
-
-## Формат JSON статьи (ключевые поля)
-```json
-{
-  "page_id": "slug",
-  "page_type": "hub | spoke | standalone",
-  "hub_id": "через-дефисы (из semantic_clusters.json)",
-  "nav_title": "Короткое название",
-  "url": "/url/",
-  "template": "chislo-sudby-1-9 | sovmestimost | chasy-00-23 | angelskie-chisla | mesyacy | null",
-  "meta": { "title": "...", "description": "...", "h1": "..." },
-  "image": "/images/hub/папка/файл.jpg",
-  "image_alt": "описание картинки",
-  "blocks": [],
-  "faq": [],
-  "internal_links": {
-    "up": null,
-    "horizontal": [],
-    "down": []
-  },
-  "date_published": "2026-07-01",
-  "date_modified": "2026-07-01",
-  "status": "done"
-}
-```
-`date_published`/`date_modified` — ключи в JSON у сгенерированных статей до
-публикации отсутствуют (не `null`, а не заданы вовсе); проставляются
-автоматически скриптом `autopilot/publish.js` в момент публикации, вручную
-в промптах не заполняются.
+- `.gitignore` для мутирующих файлов контента — не создан
+- `scripts/sync-content.sh` — не написан
+- GitHub Actions workflow — не настроен
+- cron на сервере — не установлен (сервер не поднят)
+- VPS не поднят вообще — весь `docs/DEPLOYMENT.md` пока план, не факт
+- Зонирование `linkbuilder.js` по H3 вместо H2 + общий потолок ссылок —
+  решение не принято, см. `docs/AUTOPILOT.md`
+- Существующие 34 статьи не переписаны под новые правила Промпта 2 —
+  регистр их крошек и `hub_id` могут остаться со старыми значениями,
+  если не исправлять задним числом
+- Логотип для JSON-LD использует `web-app-manifest-512x512.png` как
+  временный источник — можно заменить на выделенный файл логотипа позже
+- Реальный домен вместо `example.com`
+- `generate.js` (батч-генерация), `telegram.js` (уведомления) — не реализованы
+- Изображения для главной не сгенерированы: hero
+  (`site/public/images/hero/hero-visual.png`) и 6 иконок
+  (`site/public/images/home/icon-*.png`)
 
 ## Правила
 - Комментарии в коде на русском языке
-- Вся документация лежит в /docs/
-- hub_id всегда через дефисы — брать точно из semantic_clusters.json
-  (в самом реестре semantic_clusters.json поле хранится через подчёркивание,
-  конвертация в дефис должна происходить при генерации статьи; на практике
-  конвертация выполняется непоследовательно, см. «Не сделано»)
-- Структура блоков — /autopilot/prompts/skills/skill_07_html_components.md
-- Структура страниц — /docs/SITE.md
-- Домен пока плейсхолдер https://example.com — заменить везде когда появится
-- Любая расчётная логика на сайте (live-калькуляторы на главной) должна быть
-  точным зеркалом соответствующей функции из кода бота
-  (`src/bot/interpretations/karma/*.js`, `core.js`) — при любом расхождении
-  источник истины бот, а не сайт. Прецедент: PsychomatrixCalculator.tsx
-  содержал ошибку именно из-за расхождения с реальной формулой бота
-  (первая цифра дня бралась буквально, а не как первая ненулевая)
+- Вся документация — `/docs/`
+- `hub_id` в статье — всегда через дефис; в `semantic_clusters.json` поле
+  хранится через подчёркивание, конвертация — на этапе Промпта 2 (правило
+  явно прописано, см. `docs/CONTENT.md`)
+- Структура блоков — `/autopilot/prompts/skills/skill_07_html_components.md`
+- Структура страниц — `/docs/SITE.md`
+- Домен-плейсхолдер `https://example.com` — заменить везде, когда появится
+- Расчётная логика на сайте (live-калькуляторы) — точное зеркало кода бота
+  (`src/bot/interpretations/karma/*.js`, `core.js`); при расхождении
+  источник истины бот, не сайт
+- Данные, читаемые в рантайме серверными компонентами, — только через
+  `fs.readFile`, не через статический `import ... from "*.json"`
+  (статический импорт замораживается на этапе сборки)
+- `semantic_clusters.json` редактируется только вручную; перед коммитом
+  прогонять `node autopilot/validate-clusters.js`
+- Мутирующие файлы контента (`content/pending/`, `content/published/`,
+  `content/anchors.json`, `site/content/planned-urls.json`) не коммитятся —
+  доставка через `scripts/sync-content.sh`, не через git
 
 ## Разделение ответственности
 - Claude Code — только пишет код и редактирует файлы
