@@ -1,9 +1,9 @@
 const fs = require("fs");
 const path = require("path");
+const { buildAnchors } = require("./build-anchors");
 
 const ROOT = path.join(__dirname, "..");
-const CLUSTERS_PATH = path.join(ROOT, "content/semantic_clusters.json");
-const PLANNED_URLS_PATH = path.join(ROOT, "site/content/planned-urls.json");
+const ANCHORS_PATH = path.join(ROOT, "content/anchors.json");
 
 const MD_LINK = /\[([^\]]+)\]\(((?:\/|http)[^)]+)\)/g;
 
@@ -26,18 +26,12 @@ function isWordChar(ch) {
   return /[0-9A-Za-zА-Яа-яЁё]/.test(ch);
 }
 
-// Словарь анкоров: только опубликованные URL из семантического ядра
+// Словарь анкоров: пересобирается из семантического ядра в content/anchors.json,
+// затем читается оттуда — build-anchors.js добавляет падежные формы и синонимы
 function buildAnchorDictionary() {
-  const clusters = JSON.parse(fs.readFileSync(CLUSTERS_PATH, "utf-8")).clusters;
-  const plannedUrls = JSON.parse(fs.readFileSync(PLANNED_URLS_PATH, "utf-8"));
-
-  const byUrl = new Map();
-  for (const cluster of clusters) {
-    if (plannedUrls[cluster.url] !== true) continue;
-    if (byUrl.has(cluster.url)) continue;
-    byUrl.set(cluster.url, { anchor: cluster.primary_keyword, url: cluster.url });
-  }
-  return Array.from(byUrl.values());
+  buildAnchors();
+  const anchors = JSON.parse(fs.readFileSync(ANCHORS_PATH, "utf-8"));
+  return Object.entries(anchors).map(([anchor, url]) => ({ anchor, url }));
 }
 
 // URL уже использованные в статье — не предлагаются повторно
@@ -188,7 +182,7 @@ function processArticle(filePath, anchorDictionary) {
   const totalCount = anchorDictionary.length;
   const occupiedCount = occupiedUrls.size;
   const availableCount = sortedAnchors.filter((entry) => !occupiedUrls.has(entry.url)).length;
-  const debugLine = `[debug] ${path.basename(filePath)}: доступно анкоров в словаре — ${availableCount} (всего в semantic_clusters.json: ${totalCount}, занято URL: ${occupiedCount})`;
+  const debugLine = `[debug] ${path.basename(filePath)}: доступно анкоров в словаре — ${availableCount} (всего в anchors.json: ${totalCount}, занято URL: ${occupiedCount})`;
 
   const zones = buildZones(article.blocks);
 

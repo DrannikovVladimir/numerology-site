@@ -3,7 +3,7 @@ const SITE_NAME = "Нумерология";
 
 interface ArticleForJsonLd {
   url?: string;
-  image: string;
+  image?: string;
   meta: { h1: string; description: string };
   nav_title?: string;
   page_type: string;
@@ -42,12 +42,11 @@ export function buildJsonLd(article: ArticleForJsonLd): object {
     logo: { "@type": "ImageObject", url: `${DOMAIN}/logo.png` },
   };
 
-  const articleNode: Record<string, unknown> = {
+const articleNode: Record<string, unknown> = {
     "@type": "Article",
     "@id": `${pageUrl}#article`,
     headline: article.meta.h1,
     description: article.meta.description,
-    image: `${DOMAIN}${article.image}`,
     url: pageUrl,
     inLanguage: "ru",
     datePublished,
@@ -56,6 +55,10 @@ export function buildJsonLd(article: ArticleForJsonLd): object {
     publisher,
     mainEntityOfPage: pageUrl,
   };
+
+  if (article.image) {
+    articleNode.image = `${DOMAIN}${article.image}`;
+  }
 
   if (article.page_type === "spoke" && up) {
     articleNode.isPartOf = { "@type": "WebPage", "@id": `${DOMAIN}${up.url}` };

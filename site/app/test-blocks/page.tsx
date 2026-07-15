@@ -16,7 +16,9 @@ const blocks: Block[] = [
   {
     type: "cta",
     position: "after_intro",
-    text: "Рассчитать своё число судьбы в Telegram-боте",
+    heading: "Узнайте своё число судьбы",
+    subtext: "Рассчитать своё число судьбы в Telegram-боте",
+    button_text: "Рассчитать →",
     url: "https://t.me/numerolog_master_bot",
   },
   {
@@ -147,7 +149,9 @@ const blocks: Block[] = [
   {
     type: "cta",
     position: "end_of_article",
-    text: "Получить персональный разбор в боте",
+    heading: "Получить персональный разбор",
+    subtext: "Получить персональный разбор в боте",
+    button_text: "Открыть бота →",
     url: "https://t.me/numerolog_master_bot",
   },
 ];

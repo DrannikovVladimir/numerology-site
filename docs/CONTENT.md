@@ -3,42 +3,58 @@
 ## Общая схема
 
 ```
-semantic_clusters.json
-        ↓
+Кластер из semantic_clusters.json
+        ↓ (вручную, в чате с Claude)
    Промпт 2 → JSON карточка
-        ↓
-   Валидатор
-        ↓
+        ↓ (вручную, в чате с Claude)
    Промпт 3 → готовая статья
         ↓
-   /content/pending/
+   Сохранить вручную в content/pending/{page_id-с-дефисами}.json
+        ↓
+   autopilot/publish.js → content/published/
+        ↓
+   autopilot/linkbuilder.js  ← отдельный ручной шаг, до или после публикации,
+                                не вызывается автоматически ни одним скриптом
 ```
+
+Автоматической валидации между Промптом 2 и Промптом 3 нет —
+`autopilot/validator.js` не реализован. Проверка по чек-листу
+(`skill_06_checklist.md`) выполняется тем же диалогом с Claude на этапе
+генерации.
 
 ## Файлы системы
 
 ```
-/autopilot/prompts/
-  prompt_02_onpage.md         ← генератор карточки
-  prompt_03_generator.md      ← генератор статьи
-  skills/
-    skill_01_seo_role.md        ← роль и контекст
-    skill_02_tov_numerology.md  ← тон голоса
-    skill_03_content_rules.md   ← правила контента
-    skill_06_checklist.md       ← чек-лист качества
-    skill_07_html_components.md ← библиотека блоков
-    skill_08_jsonld_meta.md     ← сборка JSON-LD
-    skill_05_base.md            ← базовые правила для всех spoke (объём, CTA, перелинковка)
-    /hub/
-      skill_04_structure_hub.md         ← структура hub
-      skill_04b_structure_standalone.md ← структура standalone
-    /spoke/
-      skill_05_chislo-sudby-1-9.md      ← отдельный файл на каждую серию
-      skill_05_chislo-sudby-mastery.md     с уникальными блоками —
-      skill_05_sovmestimost.md             не один общий skill_05_structure_spoke.md
-      skill_05_chasy-00-23.md
-      skill_05_angelskie-chisla.md
-      skill_05_mesyacy.md
-      skill_05_matrica-sudby.md
+/autopilot/
+  publish.js                    ← реализован. Публикация: pending → published
+  linkbuilder.js                ← реализован. Автоматическая простановка контекстных ссылок
+  build-anchors.js              ← реализован. Сборка словаря анкоров для linkbuilder.js,
+                                    вызывается им автоматически
+  update-planned-urls.js        ← реализован. Синхронизация planned-urls.json с published/
+  generate.js                   ← НЕ РЕАЛИЗОВАН
+  validator.js                  ← НЕ РЕАЛИЗОВАН
+  prompts/
+    prompt_02_onpage.md         ← генератор карточки (используется вручную, в чате)
+    prompt_03_generator.md      ← генератор статьи (используется вручную, в чате)
+    skills/
+      skill_01_seo_role.md        ← роль и контекст
+      skill_02_tov_numerology.md  ← тон голоса
+      skill_03_content_rules.md   ← правила контента
+      skill_06_checklist.md       ← чек-лист качества
+      skill_07_html_components.md ← библиотека блоков
+      skill_08_jsonld_meta.md     ← сборка JSON-LD
+      skill_05_base.md            ← базовые правила для всех spoke
+      /hub/
+        skill_04_structure_hub.md         ← структура hub
+        skill_04b_structure_standalone.md ← структура standalone
+      /spoke/
+        skill_05_chislo-sudby-1-9.md      ← отдельный файл на каждую серию
+        skill_05_chislo-sudby-mastery.md     с уникальными блоками —
+        skill_05_sovmestimost.md             не один общий skill_05_structure_spoke.md
+        skill_05_chasy-00-23.md
+        skill_05_angelskie-chisla.md
+        skill_05_mesyacy.md
+        skill_05_matrica-sudby.md
 ```
 
 ## Типы страниц и шаблоны
@@ -46,13 +62,16 @@ semantic_clusters.json
 | Тип | Шаблон | Объём | Кто генерирует |
 |-----|--------|-------|----------------|
 | Hub | Гибкий, по семантике | 2000–2500 слов | Вручную |
-| Standalone | Гибкий, по семантике | 1500–2000 слов | Автопилот |
-| Spoke (числа судьбы) | chislo-sudby-1-9 | 1200–1500 слов | Автопилот |
-| Spoke (часы) | chasy-00-23 | 1200–1500 слов | Автопилот |
-| Spoke (ангельские числа) | angelskie-chisla | 1200–1500 слов | Автопилот |
-| Spoke (месяцы) | mesyacy | 1200–1500 слов | Автопилот |
-| Spoke (совместимость) | sovmestimost | 1200–1500 слов | Автопилот |
-| Spoke (матрица судьбы) | matrica-sudby | 1200–1500 слов | Автопилот — структура (9 vs 17 страниц) не утверждена, см. /docs/CLAUDE.md |
+| Standalone | Гибкий, по семантике | 1500–2000 слов | Вручную |
+| Spoke (числа судьбы) | chislo-sudby-1-9 | 1200–1500 слов | Вручную |
+| Spoke (часы) | chasy-00-23 | 1200–1500 слов | Вручную |
+| Spoke (ангельские числа) | angelskie-chisla | 1200–1500 слов | Вручную |
+| Spoke (месяцы) | mesyacy | 1200–1500 слов | Вручную |
+| Spoke (совместимость) | sovmestimost | 1200–1500 слов | Вручную |
+| Spoke (матрица судьбы) | matrica-sudby | 1200–1500 слов | Вручную — структура (9 vs 17 страниц) не утверждена, см. /docs/CLAUDE.md |
+
+Столбец «Кто генерирует» везде «Вручную» — автоматической генерации
+батчами (`generate.js`) не существует.
 
 ## Промпт 2 — карточка
 
@@ -67,24 +86,6 @@ semantic_clusters.json
 - Внутренние ссылки
 - word_count_target
 
-## Валидатор
-
-**Вход:** JSON карточка из Промпта 2
-**Выход:** ОК или список ошибок
-
-Проверяет:
-```
-☑ url соответствует кластеризации
-☑ word_count_target соответствует page_type
-☑ blocks содержит cta after_intro и end_of_article
-☑ internal_links.up заполнен (кроме hub)
-☑ primary_keyword есть в meta.h1
-☑ LSI-ключи взяты из семантики кластера
-☑ Горизонтальных ссылок не более 3 (для standalone)
-```
-
-При ошибках — повтор Промпта 2 (макс. 2 попытки).
-
 ## Промпт 3 — генератор статьи
 
 **Вход:** валидный JSON из Промпта 2
@@ -94,9 +95,17 @@ semantic_clusters.json
 - Текст по всем блокам из карточки
 - TOV: мистический экспертный
 - Ключевые слова распределены равномерно
-- Внутренние ссылки на своих местах
+- Внутренние ссылки на своих местах (промпт 3 сам расставляет их вручную по
+  правилам `skill_06_checklist.md` — `linkbuilder.js` дальше по пайплайну не
+  заменяет эту работу, а лишь добавляет ссылки в те H2-разделы, где промпт 3
+  ни одной не поставил)
 - CTA placeholders
 - FAQ с переформулированными вопросами
+
+Поля `date_published`/`date_modified` промпт не создаёт — они появляются
+только при публикации (`autopilot/publish.js`). Так и задумано: статья
+может быть сгенерирована за несколько дней до публикации, и дата должна
+отражать момент реальной публикации, а не генерации.
 
 ## Правила контента
 
@@ -118,21 +127,9 @@ semantic_clusters.json
 
 ## Чек-лист качества
 
-После генерации каждой статьи автоматически применяется
-`skill_06_checklist.md`. Отчёт сохраняется в JSON статьи.
-
-## Приоритет генерации
-
-```
-1. Standalone (13 страниц)   ← первый батч
-2. Spoke — числа судьбы      ← второй батч
-3. Spoke — часы              ← третий батч
-4. Spoke — ангельские числа  ← четвёртый батч
-5. Spoke — месяцы            ← пятый батч
-6. Spoke — совместимость     ← шестой батч
-```
-
-Hub страницы пишутся вручную до запуска автопилота.
+Чек-лист `skill_06_checklist.md` применяется вручную в процессе генерации
+(тем же диалогом с Claude), а не отдельным автоматическим прогоном после
+готовой статьи.
 
 ## Изображения
 
@@ -147,4 +144,6 @@ Spoke             → вручную, Syntx.ai, ~30 в месяц
 /content/images/standalone/vedicheskaya-numerologiya.jpg
 ```
 
-Если изображения нет — публикует без него.
+Если изображения нет — публикуется без него. Проверено: статья без
+`image` рендерится без блока картинки, JSON-LD корректно опускает поле
+`image` (оно опционально в `ArticleForJsonLd`, см. `docs/SITE.md`).

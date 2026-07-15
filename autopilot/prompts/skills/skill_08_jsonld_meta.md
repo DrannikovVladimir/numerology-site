@@ -7,7 +7,7 @@
 без дублирования контента и без риска расхождения разметки с видимым текстом.
 
 Источники данных:
-- `url`, `meta.title`, `meta.description`, `meta.h1` — Article/WebPage
+- `url`, `meta.title`, `meta.description`, `meta.h1`, `image` — Article/WebPage
 - `internal_links.up` — BreadcrumbList
 - `faq` — FAQPage
 - `page_type` — определяет глубину breadcrumb
@@ -55,6 +55,7 @@ Copilot grounding) — но больше не даёт визуального с
       "@id": "https://example.com{{url}}#article",
       "headline": "{{meta.h1}}",
       "description": "{{meta.description}}",
+      "image": "https://example.com{{image}}",
       "url": "https://example.com{{url}}",
       "inLanguage": "ru",
       "datePublished": "{{date_published}}",
@@ -131,6 +132,7 @@ Copilot grounding) — но больше не даёт визуального с
       "@id": "https://example.com{{url}}#article",
       "headline": "{{meta.h1}}",
       "description": "{{meta.description}}",
+      "image": "https://example.com{{image}}",
       "url": "https://example.com{{url}}",
       "inLanguage": "ru",
       "datePublished": "{{date_published}}",
@@ -235,6 +237,7 @@ Copilot grounding) — но больше не даёт визуального с
 
 ☑ BreadcrumbList — есть на каждой странице, глубина соответствует page_type
 ☑ Article — headline и description совпадают с meta.h1 / meta.description дословно
+☑ Article — image заполнен (обязательное поле, берётся из image статьи напрямую)
 ☑ FAQPage — добавлена только если faq[] ≥ 2 вопросов и видна на странице как текст
 ☑ Текст question/answer в разметке идентичен видимому тексту страницы (без перефразирования)
 ☑ isPartOf у spoke ведёт на реальный существующий hub из internal_links.up

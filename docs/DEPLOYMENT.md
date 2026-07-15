@@ -1,5 +1,10 @@
 # Деплой на VPS
 
+Деплой ещё не выполнялся — это инструкция на будущее. Шаги ниже отражают
+текущий набор реализованных скриптов (`publish.js`, `linkbuilder.js`,
+`update-planned-urls.js`, `build-anchors.js`); `generate.js` и
+`telegram.js` не существуют, поэтому в cron их нет.
+
 ## Требования к серверу
 
 ```
@@ -32,7 +37,7 @@ sudo apt install -y certbot python3-certbot-nginx
 ```
 /var/www/
   /site/          ← Next.js сайт
-  /autopilot/     ← скрипты автопилота
+  /autopilot/     ← publish.js, linkbuilder.js, build-anchors.js, update-planned-urls.js
   /content/       ← статьи и изображения
     /pending/
     /published/
@@ -59,6 +64,12 @@ pm2 save
 pm2 startup
 ```
 
+Перед первым `npm run build` убедиться, что `next.config.mjs` содержит
+`trailingSlash: true` — без этой настройки прод-сборка отдаёт `308
+Permanent Redirect` на каждой статье (все внутренние ссылки сайта
+построены со слэшем на конце). Настройка уже должна быть в репозитории;
+если её нет — добавить до сборки.
+
 ## Деплой автопилота
 
 ```bash
@@ -69,15 +80,26 @@ git clone https://github.com/... /var/www/autopilot
 cd /var/www/autopilot
 npm install
 
-# Создать .env
-cp .env.example .env
-nano .env  # заполнить переменные
-
 # Настроить cron
 crontab -e
 # Добавить строку:
-0 10 * * * node /var/www/autopilot/publish.js >> /var/log/autopilot.log 2>&1
+0 10 * * * cd /var/www/autopilot && node publish.js && node linkbuilder.js --dir /var/www/content/published/ >> /var/log/autopilot.log 2>&1
 ```
+
+Одна строка делает оба шага подряд: сначала публикует статью(-и) из
+очереди, затем прогоняет линкбилдер по всей папке `published/`.
+`linkbuilder.js --dir` безопасно перезапускать на уже слинкованных
+статьях — он пропускает зоны, где ссылка уже стоит, и трогает только
+новые/пустые зоны. Уведомлений в Telegram в конце нет — не реализовано.
+
+Sitemap не обновляется публикацией — это статический роут, собирается
+только при `npm run build`. Если важно, чтобы `sitemap.xml` отражал
+свежие публикации, нужна периодическая пересборка сайта отдельным
+cron-заданием, например раз в сутки:
+```bash
+30 10 * * * cd /var/www/site && npm run build && pm2 restart site >> /var/log/site-rebuild.log 2>&1
+```
+(запускать после `publish.js`, не одновременно с ним).
 
 ## Настройка Nginx
 
@@ -152,8 +174,11 @@ npm install
 pm2 status
 pm2 logs site
 
-# Логи публикатора
+# Логи публикатора и линкбилдера
 tail -f /var/log/autopilot.log
+
+# Логи пересборки (если настроена)
+tail -f /var/log/site-rebuild.log
 
 # Nginx логи
 tail -f /var/log/nginx/access.log

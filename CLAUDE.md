@@ -11,14 +11,16 @@
     page.tsx                  ← главная страница — см. подробный список секций ниже
     layout.tsx                ← Header/Footer, bg-parchment, favicon, metadata
     not-found.tsx             ← кастомная 404 (со ссылками на хабы)
-    sitemap.ts                ← генерация /sitemap.xml
+    sitemap.ts                ← генерация /sitemap.xml — статический роут,
+                                 пересобирается только при npm run build
     robots.ts                 ← генерация /robots.txt
-    /[...slug]/page.tsx       ← catch-all роут статей
+    /[...slug]/page.tsx       ← catch-all роут статей — динамический роут,
+                                 читает JSON из content/published/ в момент запроса
     /test-blocks/page.tsx     ← тестовая страница со всеми типами блоков
   /components/
     Header.tsx                ← sticky, бургер-меню (полный список хабов)
     Footer.tsx                ← сетка ссылок на 9 хабов
-    Breadcrumbs.tsx           ← хлебные крошки (2 уровня hub, 3 уровня spoke)
+    Breadcrumbs.tsx            ← хлебные крошки (2 уровня hub, 3 уровня spoke)
     TableOfContents.tsx       ← оглавление из H2-блоков статьи
     ScrollToTop.tsx           ← кнопка возврата наверх (клиентский)
     DestinyCalculator.tsx     ← live-калькулятор числа судьбы (главная), учитывает мастер-числа 11/22/33
@@ -34,10 +36,12 @@
       Callout.tsx             ← варианты: tip, warning, info, important, practice
       FactRow.tsx, Cta.tsx, Faq.tsx, Links.tsx
       Image.tsx               ← next/image с caption
-      BlockRenderer.tsx       ← 13 типов блоков
+      BlockRenderer.tsx       ← 13 типов блоков, здесь же определены TypeScript-типы
+                                  всех блоков (CtaBlock и т.д.) — источник истины по схеме
   /lib/
     slugify.ts                ← утилита для генерации id из текста
-    jsonld.ts                 ← сборка JSON-LD (BreadcrumbList, Article, FAQPage)
+    jsonld.ts                 ← сборка JSON-LD (BreadcrumbList, Article, FAQPage);
+                                  ArticleForJsonLd.image опционален
   /content/
     planned-urls.json         ← реестр {url: true/false} — опубликована ли статья
   /public/
@@ -47,16 +51,31 @@
     site.webmanifest
     /images/hub/              ← изображения для hub-статей
     /images/home/             ← иконки для блока «Что расскажет о вас нумерология» (главная)
+  next.config.mjs             ← trailingSlash: true — обязательна, все ссылки на сайте
+                                  построены с завершающим "/"; без этой настройки прод-сборка
+                                  (npm run build && npm start) отдаёт 308 redirect на каждой
+                                  статье, в npm run dev проблема не проявляется
   tailwind.config.ts          ← палитра "тёплый пергамент"
 
 /content/                     ← JSON-статьи и изображения (вне /site/)
   semantic_clusters.json      ← реестр кластеров, актуальное число — см. meta.total в самом файле
-  /published/                 ← 9 hub-статей + spoke-статьи (числа судьбы 1, 2, 3)
-  /pending/, /error/          ← не используются пока
+  anchors.json                ← словарь анкоров для linkbuilder.js, пересобирается
+                                 автоматически (build-anchors.js), руками не редактируется
+  /published/                 ← 34 статьи (9 hub + 25 spoke, все 9 хабов опубликованы) —
+                                 см. planned-urls.json
+  /pending/                   ← очередь на публикацию, забирается publish.js
+                                 (FIFO по mtime файла, не по created_at внутри JSON)
+  /error/                     ← не используется пока
 
 /autopilot/
-  update-planned-urls.js      ← обновляет site/content/planned-urls.json
-  linkbuilder.js              ← [TODO] автоматическая простановка контекстных ссылок
+  publish.js                 ← публикатор: pending → published, проставляет
+                                 date_published/date_modified, вызывает
+                                 update-planned-urls.js в конце. CLI: --count N,
+                                 --dry-run. Telegram-уведомления не реализованы
+  update-planned-urls.js      ← обновляет site/content/planned-urls.json на основе
+                                 того, что реально лежит в content/published/
+  linkbuilder.js              ← автоматическая простановка контекстных ссылок (CLI: --file/--dir/--dry-run)
+  build-anchors.js            ← сборка content/anchors.json, вызывается linkbuilder.js автоматически
   /prompts/
     prompt_02_onpage.md       ← генератор карточки кластера
     prompt_03_generator.md    ← генератор статьи
@@ -115,6 +134,8 @@ inkMuted:   '#6B5A47'  текст вторичный
 - Якоря на H2/H3 заголовках через slugify
 - Поддержка Markdown-ссылок [текст](url) в параграфах
 - Favicon и иконки для всех платформ
+- Прод-сборка (npm run build && npm start) проверена целиком: компилируется чисто,
+  все статьи отдают 200 без редиректов, sitemap.xml корректно статичен
 
 ### Главная страница
 Полноценный лендинг, сверху вниз:
@@ -139,7 +160,7 @@ inkMuted:   '#6B5A47'  текст вторичный
 
 ### Роутинг и SEO
 - Catch-all роут /[...slug]/page.tsx:
-  - читает статью из content/published/{slug}.json
+  - читает статью из content/published/{slug}.json в момент запроса (динамический роут)
   - если файла нет, но url в planned-urls.json → "страница в разработке"
     (свой title "Страница в разработке", robots noindex, список хабов как на 404)
   - если url нигде не числится → кастомная 404 (not-found.tsx) со ссылками на хабы
@@ -150,27 +171,37 @@ inkMuted:   '#6B5A47'  текст вторичный
   вместо мусора из create-next-app — используются только если страница
   не задаёт свои метаданные
 - Open Graph + Twitter Card теги на всех страницах
-- Canonical URL
-- JSON-LD разметка (BreadcrumbList + Article + FAQPage если ≥2 вопросов)
-  - Article: image — обязательное поле, берётся из article.image напрямую
-  - Article: datePublished/dateModified — из article.date_published/date_modified
-    (если статья ещё не публиковалась через publish.js и полей нет, падает на
-    текущую дату — актуально только для контента, изданного до появления скрипта)
-- sitemap.xml (автогенерация из published статей)
-- robots.txt
+- Canonical URL и все внутренние ссылки построены с завершающим "/" —
+  next.config.mjs задаёт trailingSlash: true; без неё прод-сборка редиректит (308)
+  версию со слэшем на версию без него на каждой статье
+- JSON-LD разметка (BreadcrumbList + Article + FAQPage при ≥2 вопросах)
+  - Article: image — опциональное поле (`ArticleForJsonLd.image?`), добавляется в
+    разметку только если `article.image` заполнен (статья без картинки — легальный
+    сценарий по AUTOPILOT.md)
+  - Article: datePublished/dateModified — из article.date_published/date_modified,
+    проставляются автоматически скриптом autopilot/publish.js в момент публикации
+- sitemap.xml — статический роут, читает published-статьи через planned-urls.json,
+  фиксируется на этапе npm run build. Новые публикации не появляются в sitemap
+  без пересборки сайта — подтверждённое поведение, не баг (см. AUTOPILOT.md)
 
 ### Контент
-- 28 статей опубликовано в content/published/ (9 hub + 19 spoke) — см. planned-urls.json
+- 34 статьи опубликовано в content/published/ (9 hub + 25 spoke), все 9 hub-страниц
+  опубликованы — см. planned-urls.json
 - Spoke опубликованы по сериям: числа судьбы (1, 2, 3, 11, 22, 33), совместимость
-  (5 пар), часы (4), ангельские числа (3), месяцы (1) — hub→spoke цикл проверен
-- «Квадрат Пифагора» — статья полностью готова (JSON с 3 изображениями),
-  но ещё НЕ в content/published/ — последний шаг перед публикацией
-- «Матрица судьбы» — готова методика расчёта и трактовки ячеек (см. ниже
-  «Не сделано»), сама hub-статья ещё не написана, URL пока отдаёт заглушку
-  «в разработке»
+  (1-1, 2-2, 3-3, 4-4, 5-5, 1-9), часы (00-00, 01-01, 02-02, 22-44), ангельские числа
+  (1111, 1212, 1313, 1616, 1717, 2222), месяцы (январь, февраль, ноябрь) — hub→spoke
+  цикл проверен end-to-end, включая прод-сборку
+- «Квадрат Пифагора» — hub-статья опубликована в content/published/
+  (есть известный баг — дубль H2-блока с разным lead, см. «Не сделано»)
+- «Матрица судьбы» — hub-статья опубликована в content/published/
+  (подтверждено прогоном linkbuilder.js), 9 spoke по ячейкам ещё не написаны
+  (методика расчёта и трактовки готова, см. «Не сделано»)
 - Изображения для всех 9 хабов в site/public/images/hub/
 - CTA-правило: 2 CTA на бота (разные формулировки) + 1 на канал (mid_article_channel)
 - nav_title поле в каждой статье — короткое название для крошек
+- Текст хлебной крошки на хаб (internal_links.up.anchor) генерируется заново в
+  каждой статье промптом 2/3, не наследуется от nav_title хаба — регистр
+  непоследователен между сериями (например «числа судьбы» vs «Ангельские числа»)
 
 ### Контентная система (промпты и скилы)
 - prompt_02_onpage.md — генерирует карточку кластера (JSON-скелет)
@@ -179,41 +210,39 @@ inkMuted:   '#6B5A47'  текст вторичный
   - skill_05_base.md — общие правила для всех spoke
   - /spoke/ папка — отдельный файл для каждой серии с уникальными блоками
 - Протестированные серии: chislo-sudby-1-9, sovmestimost, chasy-00-23, angelskie-chisla, mesyacy
-- matrica-sudby — методика написана (skill-файл готов, 9 spoke по ячейкам,
-  линии — врезки на ячейках + раздел хаба, не отдельные страницы), контент
-  по ней ещё не генерировался
 - Контекстные ссылки в тексте — правило в prompt_03, приоритет опубликованным URL
 
 ### Скрипты
 - node autopilot/update-planned-urls.js — обновляет planned-urls.json
-  (запускать после добавления новых статей в content/published/)
+  (publish.js вызывает его автоматически в конце своей работы; отдельный запуск
+  нужен только вне цикла публикации)
+- node autopilot/publish.js [--count N] [--dry-run] — публикатор: берёт N старейших
+  файлов из content/pending/ (FIFO по mtime), проставляет
+  date_published/date_modified, перекладывает в content/published/. Не вызывает
+  linkbuilder.js автоматически — линковка отдельный шаг:
+  `node autopilot/linkbuilder.js --file content/published/{имя}.json`
 
 ## Не сделано / следующие шаги
 
-**Матрица судьбы — структура утверждена, осталось написать статьи:**
-- Финальная структура: 9 spoke-страниц (по одной на цифру 1-9), линии
-  НЕ получают отдельных URL — решение принято сознательно (проверили
-  реальный спрос: "линия" в широком поиске почти всегда относится к
-  другой, гораздо более популярной системе "матрица судьбы" на 22
-  арканах Таро — не к методу Александрова, который реализован у нас;
-  подробности решения — в истории чата, при необходимости пересказать)
-  Линии живут как врезки на страницах ячеек + отдельный раздел на хабе
-- skill-файл переписан под реальные данные бота (`pythagorean_matrix.json`):
-  7 уровней глубины на ячейку вместо 3, планета/стихия/домен/вопрос
-- Источник интерпретаций для генерации — датасет бота, должен лежать в
-  content/data/pythagorean-matrix.json (скопировать из бота, ещё не сделано)
-- Сама hub-статья «Матрица судьбы» не написана, как и все 9 spoke
-
 **Прочее:**
-- linkbuilder.js — автоматическая простановка контекстных ссылок перед публикацией
-- Мобильная полировка — не проверялась вживую
+- Зонирование linkbuilder.js по H3 вместо H2 + общий потолок ссылок на
+  статью — решение не принято, см. autopilot/AUTOPILOT.md, раздел
+  «linkbuilder.js», «Известные ограничения»
+- Регистр текста хлебной крошки хаба непоследователен между статьями
+  (internal_links.up.anchor генерируется заново промптом, не наследует
+  nav_title хаба) — чинить в промпте/скиле генерации
+- hub_id/page_id иногда генерируются с подчёркиванием вместо дефиса — на
+  breadcrumbs не влияет (строятся из URL статьи через Breadcrumbs.tsx, не
+  из hub_id напрямую), но расходится с правилом «hub_id всегда через дефисы»
 - Логотип в хедере — сейчас текст, нужна иконка лабиринта (SvgLabyrinth уже
   используется в CTA-блоках статей, в хедере не подключена)
 - Логотип для JSON-LD (Organization/Article publisher.logo) — путь /images/logo.png,
   файла нет; нужно решить, какой файл использовать (см. public/, есть
   web-app-manifest-512x512.png — подходит по размеру)
 - Деплой — VPS, Nginx, PM2, реальный домен вместо example.com
-- Автопилот — generate.js, publish.js, telegram.js (намеренно не трогаем)
+- Автопилот — generate.js (батч-генерация), telegram.js (уведомления),
+  validator.js, storage.js — не реализованы. publish.js и linkbuilder.js
+  реализованы и проверены end-to-end вручную (см. AUTOPILOT.md)
 - Финальный CTA-блок перед футером на главной — сознательно отложен
 - Изображения для главной ещё не сгенерированы и не положены на диск:
   hero (`site/public/images/hero/hero-visual.png`) и 6 иконок блока
@@ -245,13 +274,18 @@ inkMuted:   '#6B5A47'  текст вторичный
   "status": "done"
 }
 ```
-`date_published`/`date_modified` проставляются автоматически скриптом
-`autopilot/publish.js` в момент публикации — вручную в промптах не заполняются.
+`date_published`/`date_modified` — ключи в JSON у сгенерированных статей до
+публикации отсутствуют (не `null`, а не заданы вовсе); проставляются
+автоматически скриптом `autopilot/publish.js` в момент публикации, вручную
+в промптах не заполняются.
 
 ## Правила
 - Комментарии в коде на русском языке
 - Вся документация лежит в /docs/
 - hub_id всегда через дефисы — брать точно из semantic_clusters.json
+  (в самом реестре semantic_clusters.json поле хранится через подчёркивание,
+  конвертация в дефис должна происходить при генерации статьи; на практике
+  конвертация выполняется непоследовательно, см. «Не сделано»)
 - Структура блоков — /autopilot/prompts/skills/skill_07_html_components.md
 - Структура страниц — /docs/SITE.md
 - Домен пока плейсхолдер https://example.com — заменить везде когда появится
