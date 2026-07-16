@@ -3,3 +3,12 @@ node_modules/
 .env.local
 site/.next/
 site/node_modules/
+
+# Контент — мутируется скриптами автопилота на сервере, доставляется
+# отдельно через rsync (scripts/sync-content.sh), не через git
+content/pending/
+content/published/
+content/error/
+content/images/
+content/anchors.json
+site/content/planned-urls.json
