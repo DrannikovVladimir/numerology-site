@@ -15,9 +15,13 @@
     robots.ts                 ← /robots.txt
     /[...slug]/page.tsx       ← catch-all роут статей, on-demand ISR
                                  (revalidate 86400) — см. docs/ARCHITECTURE.md
+    /api/revalidate/route.ts  ← точечный сброс ISR-кеша конкретного URL
+                                 (POST + secret), см. docs/ARCHITECTURE.md
     /test-blocks/page.tsx     ← тестовая страница со всеми типами блоков
   /components/
-    Header.tsx, Footer.tsx, Breadcrumbs.tsx, TableOfContents.tsx, ScrollToTop.tsx
+    Header.tsx                ← лого — SVG-лабиринт (currentColor, тот же мотив,
+                                 что в CTA-блоках статей)
+    Footer.tsx, Breadcrumbs.tsx, TableOfContents.tsx, ScrollToTop.tsx
     DestinyCalculator.tsx, PsychomatrixCalculator.tsx ← формулы — зеркало бота
       (src/bot/interpretations/karma/karma.js), править синхронно
     NumberWheel.tsx            ← координаты точек считаются в коде, не хардкодятся
@@ -25,7 +29,8 @@
       13 компонентов + BlockRenderer.tsx — источник истины по TypeScript-схеме блоков
   /lib/
     slugify.ts
-    jsonld.ts                 ← сборка JSON-LD; ArticleForJsonLd.image опционален
+    jsonld.ts                 ← сборка JSON-LD; ArticleForJsonLd.image опционален;
+                                 publisher.logo → /images/logo.png
   /content/
     planned-urls.json         ← реестр {url: true/false}, НЕ в git (см. ниже)
   /public/
@@ -34,6 +39,8 @@
   next.config.mjs             ← trailingSlash: true (обязательна)
   package.json                ← включает sharp
   tailwind.config.ts          ← палитра "тёплый пергамент"
+  .env                        ← НЕ в git. REVALIDATE_SECRET — создаётся вручную
+                                 на сервере, см. docs/DEPLOYMENT.md
 
 /content/
   semantic_clusters.json      ← реестр кластеров, В GIT, редактируется только вручную
@@ -47,24 +54,38 @@
   build-anchors.js            ← сборка anchors.json
   validate-clusters.js        ← проверка semantic_clusters.json (дефис/подчёркивание
                                  в url, дубли id, обязательные поля) — запускать
-                                 перед коммитом
+                                 перед коммитом. Протестирован, 0 ошибок
   /prompts/                   ← prompt_02_onpage.md, prompt_03_generator.md, /skills/
 
 /scripts/
-  sync-content.sh              ← ЗАПЛАНИРОВАН: rsync content/pending/ на сервер
+  sync-content.sh              ← rsync content/pending/ на сервер (новые статьи,
+                                  --ignore-existing)
+  update-article.sh            ← доставка правки уже опубликованной статьи
+                                  (перезапись) + сброс её ISR-кеша
 
 /docs/                         ← документация проекта
-.gitignore                     ← ЗАПЛАНИРОВАН, см. docs/DEPLOYMENT.md
+.gitignore                     ← контент исключён (content/pending, content/published,
+                                  content/anchors.json, site/content/planned-urls.json)
+                                  + node_modules, .env, .next
 ```
 
 ## Git и синхронизация с VPS
-Git отслеживает только код (`site/`, `autopilot/`-скрипты, `docs/`,
-`content/semantic_clusters.json`). Файлы, которые мутируют скрипты на
-сервере (`content/pending/`, `content/published/`, `content/anchors.json`,
-`site/content/planned-urls.json`), исключены из git и доставляются
-отдельно через `rsync`. Подробности и обоснование — `docs/ARCHITECTURE.md`,
-раздел «Два независимых канала синхронизации»; пошаговая настройка —
-`docs/DEPLOYMENT.md`.
+Git отслеживает только код (`site/`, `autopilot/`-скрипты, `scripts/`,
+`docs/`, `content/semantic_clusters.json`). Файлы, которые мутируют
+скрипты на сервере (`content/pending/`, `content/published/`,
+`content/anchors.json`, `site/content/planned-urls.json`), исключены из
+git и доставляются отдельно через `rsync`. Подробности и обоснование —
+`docs/ARCHITECTURE.md`, раздел «Два независимых канала синхронизации»;
+пошаговая настройка — `docs/DEPLOYMENT.md`.
+
+Три сценария синхронизации:
+1. **Новые статьи** → `scripts/sync-content.sh` → `content/pending/` на
+   сервере → cron публикует по расписанию
+2. **Правка уже опубликованной статьи** → `scripts/update-article.sh` →
+   перезаписывает файл в `content/published/` на сервере + сбрасывает
+   ISR-кеш этого URL мгновенно
+3. **Код** → `git push` → GitHub Actions → `git pull` (+ пересборка, если
+   менялся `site/`/`autopilot/`)
 
 ## Стек сайта
 Next.js 14 (App Router), Tailwind CSS, TypeScript.
@@ -83,12 +104,17 @@ ink: '#3D2B1F'   inkMuted: '#6B5A47'
   `docs/SITE.md`
 - **Кеширование (ISR)**: статьи — `revalidate 86400`, sitemap —
   `revalidate 3600`, оба поверх `fs.readFile` (не статический импорт).
-  Механизм и почему `generateStaticParams` обязателен — `docs/ARCHITECTURE.md`
+  Плюс точечный сброс кеша конкретного URL по требованию
+  (`/api/revalidate`) — для случаев ручного редактирования уже
+  опубликованной статьи. Механизм — `docs/ARCHITECTURE.md`
 - `sharp` установлен, логотип подключён (хедер — SVG-лабиринт, JSON-LD —
   `/images/logo.png`)
 - Автопилот: `publish.js`, `linkbuilder.js`, `update-planned-urls.js`,
   `build-anchors.js`, `validate-clusters.js` реализованы и проверены
   end-to-end вручную. Подробности — `docs/AUTOPILOT.md`
+- Git/rsync разделение: `.gitignore` настроен, контент убран из индекса
+  и запушен, `scripts/sync-content.sh` и `scripts/update-article.sh`
+  написаны (не протестированы на реальном сервере — VPS ещё нет)
 - Контентная система: `prompt_02_onpage.md`/`prompt_03_generator.md` +
   skill-файлы. `hub_id` и анкор хлебной крошки на хаб теперь имеют явные
   правила в Промпте 2 (конвертация подчёркивания в дефис; анкор берётся
@@ -96,18 +122,21 @@ ink: '#3D2B1F'   inkMuted: '#6B5A47'
 - Формат JSON статьи и правила хранения — `docs/STORAGE.md`
 
 ## Не сделано / следующие шаги
-- `.gitignore` для мутирующих файлов контента — не создан
-- `scripts/sync-content.sh` — не написан
-- GitHub Actions workflow — не настроен
+- GitHub Actions workflow (`.github/workflows/deploy.yml`) — не создан
 - cron на сервере — не установлен (сервер не поднят)
 - VPS не поднят вообще — весь `docs/DEPLOYMENT.md` пока план, не факт
+- `scripts/sync-content.sh`/`update-article.sh` не протестированы на
+  реальном сервере — только написаны
+- `REVALIDATE_SECRET` нужно сгенерировать и создать `site/.env` на
+  сервере вручную при первом деплое (в git не попадёт никогда)
 - Зонирование `linkbuilder.js` по H3 вместо H2 + общий потолок ссылок —
   решение не принято, см. `docs/AUTOPILOT.md`
 - Существующие 34 статьи не переписаны под новые правила Промпта 2 —
   регистр их крошек и `hub_id` могут остаться со старыми значениями,
-  если не исправлять задним числом
+  если не исправлять задним числом (для этого есть
+  `scripts/update-article.sh`, но точечно, вручную)
 - Логотип для JSON-LD использует `web-app-manifest-512x512.png` как
-  временный источник — можно заменить на выделенный файл логотипа позже
+  временный источник
 - Реальный домен вместо `example.com`
 - `generate.js` (батч-генерация), `telegram.js` (уведомления) — не реализованы
 - Изображения для главной не сгенерированы: hero
@@ -133,7 +162,12 @@ ink: '#3D2B1F'   inkMuted: '#6B5A47'
   прогонять `node autopilot/validate-clusters.js`
 - Мутирующие файлы контента (`content/pending/`, `content/published/`,
   `content/anchors.json`, `site/content/planned-urls.json`) не коммитятся —
-  доставка через `scripts/sync-content.sh`, не через git
+  доставка через `scripts/sync-content.sh` (новые) или
+  `scripts/update-article.sh` (правки существующих), не через git
+- Правка уже опубликованной статьи требует сброса ISR-кеша
+  (`scripts/update-article.sh`) — простой перезаписи файла на сервере
+  недостаточно, изменения не появятся на сайте до истечения текущего
+  окна `revalidate`
 
 ## Разделение ответственности
 - Claude Code — только пишет код и редактирует файлы

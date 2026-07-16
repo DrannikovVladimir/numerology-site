@@ -46,15 +46,30 @@ const response = await client.messages.create({
 будущей реализации — см. `docs/AUTOPILOT.md`, раздел «Уведомление в
 Telegram».
 
+## Сброс кеша при ручном обновлении статьи
+
+`site/app/api/revalidate/route.ts` — защищённый секретом route handler,
+единственный собственный API-эндпоинт сайта. Принимает
+`POST /api/revalidate?secret=...&path=/url/` и вызывает `revalidatePath()`
+для этого URL — мгновенно сбрасывает ISR-кеш конкретной страницы (иначе
+правка была бы не видна до истечения суточного окна `revalidate`).
+Используется скриптом `scripts/update-article.sh` при доработке уже
+опубликованной статьи. Подробности механизма — `docs/ARCHITECTURE.md`.
+
 ## Переменные окружения
 
-Сегодня скриптам (`publish.js`, `linkbuilder.js`, `update-planned-urls.js`,
-`build-anchors.js`) не требуется никаких переменных окружения — они
-работают с локальной файловой системой без внешних API-ключей.
+`site/.env` (НЕ в git, создаётся вручную на сервере):
+```
+REVALIDATE_SECRET=<случайная строка, см. docs/DEPLOYMENT.md>
+```
+Это единственная переменная окружения, реально используемая сегодня.
+Скриптам автопилота (`publish.js`, `linkbuilder.js`,
+`update-planned-urls.js`, `build-anchors.js`, `validate-clusters.js`)
+переменные окружения не нужны — они работают с локальной файловой
+системой без внешних API-ключей.
 
 Если в будущем появится `generate.js` или `telegram.js`, им
-потребуется `.env` с примерно таким содержимым (не создан сегодня,
-не используется):
+потребуются дополнительные переменные (не созданы сегодня, не используются):
 ```
 ANTHROPIC_API_KEY=sk-ant-...
 TELEGRAM_BOT_TOKEN=...

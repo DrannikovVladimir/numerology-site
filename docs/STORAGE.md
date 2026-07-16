@@ -8,10 +8,13 @@
 | Кто | Что делает | Файлы |
 |-----|-----------|-------|
 | `app/[...slug]/page.tsx` | Читает статью по slug (`fs.readFile`) | `content/published/{slug}.json` |
+| `app/sitemap.ts` | Читает реестр публикаций (`fs.readFile`, не статический import — см. прецедент ниже) | `site/content/planned-urls.json` |
+| `app/api/revalidate/route.ts` | Не читает файлы — сбрасывает ISR-кеш конкретного URL по запросу | — (работает с кешем Next.js, не с диском) |
 | `autopilot/publish.js` | Читает/перемещает файлы очереди | `content/pending/` → `content/published/` |
 | `autopilot/update-planned-urls.js` | Пересобирает реестр публикаций с нуля | `content/semantic_clusters.json` + `content/published/` → `site/content/planned-urls.json` |
 | `autopilot/linkbuilder.js` | Читает и перезаписывает статью | `content/pending/*.json` или `content/published/*.json` |
 | `autopilot/build-anchors.js` | Пересобирает словарь анкоров | `content/semantic_clusters.json` + `site/content/planned-urls.json` → `content/anchors.json` |
+| `autopilot/validate-clusters.js` | Только читает, ничего не пишет | `content/semantic_clusters.json` |
 
 Если в будущем появится абстракция хранилища или миграция на БД — начинать
 нужно с замены этих прямых обращений к `fs` во всех перечисленных местах,

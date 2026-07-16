@@ -1,34 +1,56 @@
-# Нумерологический сайт на автопилоте
+# Нумерологический сайт
 
 ## Что это
 Информационный сайт по нумерологии на русском языке.
-Контент генерируется автоматически через Anthropic API.
-Цель — органический трафик из Google и Яндекс с переводом в Telegram.
+Контент — JSON-статьи, отдаются сайтом динамически через Next.js.
+Цель — органический трафик из Google и Яндекс с переводом в Telegram-канал и бот.
 
-## Как работает
-1. Семантическое ядро кластеризуется вручную (один раз)
-2. Автопилот генерирует статьи батчами по 30-50 штук
-3. Публикатор выкладывает одну статью в день
-4. Hub-страницы пишутся вручную
+## Как работает сейчас
+1. Семантическое ядро кластеризуется вручную (один раз) — `content/semantic_clusters.json`
+2. Статьи генерируются вручную, в чате с Claude, по промптам и skill-файлам
+   из `autopilot/prompts/` (см. `docs/AUTOPILOT.md`, `docs/CONTENT.md`).
+   Готовый JSON сохраняется вручную в `content/pending/`
+3. `autopilot/publish.js` публикует статьи из очереди: переносит в
+   `content/published/`, проставляет `date_published`/`date_modified`,
+   обновляет `site/content/planned-urls.json`
+4. `autopilot/linkbuilder.js` — отдельный шаг, простановка контекстных
+   ссылок. Не вызывается автоматически из `publish.js`
+5. Hub-страницы пишутся тем же ручным способом, что и spoke
 
 ## Компоненты
-- **Сайт** — Next.js 14, отдаёт статьи пользователям
-- **Автопилот** — Node.js скрипт, генерирует и публикует статьи
-- **Хранилище** — JSON файлы с абстракцией под PostgreSQL
+- **Сайт** — Next.js 14, отдаёт статьи пользователям; роут `/[...slug]/`
+  читает JSON из `content/published/` при первом запросе и кеширует
+  результат на сутки (on-demand ISR, см. `docs/ARCHITECTURE.md`)
+- **Публикатор** (`autopilot/publish.js`) — перекладывает статьи из
+  `pending/` в `published/`
+- **Линкбилдер** (`autopilot/linkbuilder.js`) — автоматическая простановка
+  внутренних ссылок
+- **Валидатор реестра** (`autopilot/validate-clusters.js`) — проверка
+  `semantic_clusters.json` перед коммитом
+- **Хранилище** — JSON-файлы на диске, каждый скрипт читает/пишет их
+  напрямую через `fs`, без общего интерфейса; контент не в git,
+  доставляется через `rsync` (`scripts/sync-content.sh`,
+  `scripts/update-article.sh`)
 
 ## Технологии
 ```
-Сайт:         Next.js 14 (App Router), Tailwind CSS
-Автопилот:    Node.js, node-cron
-AI:           Anthropic API (claude-sonnet-4-6)
-Уведомления:  Telegram Bot API
-Сервер:       Ubuntu 24, Nginx, PM2
+Сайт:         Next.js 14 (App Router), Tailwind CSS, TypeScript
+Автопилот:    Node.js (publish.js, linkbuilder.js, build-anchors.js,
+              update-planned-urls.js, validate-clusters.js)
+Синхронизация: rsync (sync-content.sh, update-article.sh), git — только код
+Сервер:       Ubuntu 24, Nginx, PM2 (деплой ещё не выполнен)
 ```
+
+## Не реализовано
+Генерация статей скриптом (`generate.js`), автоматическая валидация
+(`validator.js`), Telegram-уведомления (`telegram.js`) и слой хранилища
+(`storage.js`) — не написаны. Подробности и статус каждого пункта —
+`docs/CLAUDE.md`, раздел «Не сделано».
 
 ## Структура репозитория
 ```
 /site/          ← Next.js сайт
-/autopilot/     ← скрипты генерации и публикации
+/autopilot/     ← скрипты публикации и линковки, промпты генерации
 /content/       ← статьи и изображения
 /docs/          ← документация
 ```
@@ -36,8 +58,8 @@ AI:           Anthropic API (claude-sonnet-4-6)
 ## Документация
 - [ARCHITECTURE.md](ARCHITECTURE.md) — архитектура системы
 - [SITE.md](SITE.md) — структура сайта и страниц
-- [AUTOPILOT.md](AUTOPILOT.md) — логика автопилота
-- [STORAGE.md](STORAGE.md) — слой хранилища
-- [API.md](API.md) — внешние API
+- [AUTOPILOT.md](AUTOPILOT.md) — логика публикации и линковки
+- [STORAGE.md](STORAGE.md) — как и где хранятся данные
+- [API.md](API.md) — внешние сервисы (Anthropic, Telegram)
 - [DEPLOYMENT.md](DEPLOYMENT.md) — деплой на VPS
 - [CONTENT.md](CONTENT.md) — контентный пайплайн

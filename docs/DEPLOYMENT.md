@@ -2,7 +2,7 @@
 
 Деплой ещё не выполнялся — это инструкция на будущее. Отражает решение:
 git синхронизирует только код, контент доставляется отдельно через rsync
-(см. `docs/ARCHITECTURE.md`, раздел «Два независимых канала
+(см. `docs/ARCHITECTURE.md`, раздел «Три независимых канала
 синхронизации»).
 
 ## Требования к серверу
@@ -32,40 +32,22 @@ sudo apt install -y nginx
 sudo apt install -y certbot python3-certbot-nginx
 ```
 
-## Подготовка репозитория — .gitignore
-
-**До первого коммита с деплоем** добавить в `.gitignore` в корне репозитория:
-```
-content/pending/
-content/published/
-content/error/
-content/images/
-content/anchors.json
-site/content/planned-urls.json
-```
-`content/semantic_clusters.json` **остаётся отслеживаемым** — редактируется
-только вручную, скрипты его не пишут.
-
-Если какие-то из этих путей уже закоммичены (например, из тестового
-прогона) — убрать их из индекса до пуша, не удаляя с диска:
-```bash
-git rm -r --cached content/pending content/published content/anchors.json site/content/planned-urls.json
-git add .gitignore
-git commit -m "content: файлы публикации не отслеживаются git, доставка через rsync"
-```
-
 ## Первоначальный запуск (один раз)
 
 ```bash
-# 1. Клонировать репозиторий
+# 1. Клонировать репозиторий (.gitignore уже настроен, контент туда не попадёт)
 git clone https://github.com/твой-репозиторий /var/www/numerology-site
 cd /var/www/numerology-site
 
 # 2. Создать папки под контент (их нет в git)
 mkdir -p content/pending content/published content/error
 
-# 3. Собрать и поднять сайт
+# 3. Создать .env с секретом для сброса кеша (НЕ в git, только на сервере)
 cd site
+echo "REVALIDATE_SECRET=$(openssl rand -hex 32)" > .env
+cat .env   # сохрани это значение — понадобится в scripts/update-article.sh
+
+# 4. Собрать и поднять сайт
 npm install
 npm run build
 pm2 start npm --name "site" -- start
@@ -81,23 +63,11 @@ Permanent Redirect` на каждой статье.
 
 Локально, из корня репозитория:
 ```bash
-bash scripts/sync-content.sh
-```
-Содержимое `scripts/sync-content.sh`:
-```bash
-#!/bin/bash
-# Доставляет новые статьи из локальной content/pending/ на сервер.
-# Не трогает файлы, которых уже нет локально (значит уже опубликованы
-# на сервере) — используется --ignore-existing, а не полная синхронизация.
-set -e
-
-VPS_HOST="user@your-vps-ip"
-VPS_PATH="/var/www/numerology-site/content/pending/"
-
-rsync -avz --ignore-existing content/pending/ "$VPS_HOST:$VPS_PATH"
-echo "Готово. Статьи скопированы в очередь на сервере."
+VPS_HOST=user@1.2.3.4 bash scripts/sync-content.sh
 ```
 Требует, чтобы SSH-доступ к серверу был настроен по ключу (без пароля).
+Скрипт использует `rsync --ignore-existing` — безопасен для повторных
+запусков, не тронет файлы, уже обработанные на сервере.
 
 ## Публикация первых 30 статей (один раз, вручную)
 
@@ -125,6 +95,25 @@ crontab -e
 чтобы доставить их в очередь на сервере. Публикация из очереди
 происходит сама, по одной в день.
 
+## Обновление уже опубликованной статьи
+
+Если статью нужно доработать (добавить картинки, раздел и т.п.) уже
+после публикации:
+```bash
+# 1. Скачать текущую версию с сервера
+rsync -avz user@1.2.3.4:/var/www/numerology-site/content/published/chislo-sudby-7.json content/published/
+
+# 2. Отредактировать локально content/published/chislo-sudby-7.json
+
+# 3. Отправить обновление и сбросить кеш этой страницы
+REVALIDATE_SECRET=<значение из site/.env на сервере> VPS_HOST=user@1.2.3.4 \
+  bash scripts/update-article.sh content/published/chislo-sudby-7.json /chislo-sudby/7/
+```
+`update-article.sh` сам проставит `date_modified`, перезапишет файл на
+сервере (не через `pending/`) и вызовет `/api/revalidate` — изменения
+появятся на сайте сразу, без ожидания суточного окна кеша и без
+пересборки. Подробности механизма — `docs/ARCHITECTURE.md`.
+
 ## Кеширование (ISR) — почему пересборка сайта не нужна для контента
 
 Сайт использует on-demand ISR:
@@ -132,13 +121,15 @@ crontab -e
   открывается сразу же по первому запросу, без пересборки и рестарта PM2
 - `sitemap.xml` — `revalidate = 3600` (час). Новая публикация появляется
   в sitemap автоматически в течение часа, тоже без пересборки
+- Правка уже опубликованной статьи — мгновенно, через
+  `scripts/update-article.sh` и `/api/revalidate` (см. выше)
 
 `npm run build` нужен **только** при изменении кода сайта — компонентов,
-стилей, конфигурации. Публикация контента его не требует.
+стилей, конфигурации. Публикация и правка контента его не требуют.
 
 ## CI/CD — деплой кода по git push
 
-Два секрета в GitHub → Settings → Secrets: `VPS_HOST`, `VPS_USER`,
+Три секрета в GitHub → Settings → Secrets: `VPS_HOST`, `VPS_USER`,
 `DEPLOY_SSH_KEY` (приватный ключ; публичный — в `~/.ssh/authorized_keys`
 на сервере).
 
@@ -196,8 +187,9 @@ jobs:
 **Что это даёт:**
 - Правка компонента/стиля/конфига → `git push` → сайт пересобран и
   перезапущен автоматически
-- Новая пачка статей → **не через git**, а через `scripts/sync-content.sh` →
-  файлы попадают в очередь на сервере → cron публикует по расписанию
+- Новая пачка статей → **не через git**, а через `scripts/sync-content.sh`
+- Правка существующей статьи → **не через git**, а через
+  `scripts/update-article.sh`
 
 CI/CD **не должен** вызывать `publish.js` — публикация только по cron
 на сервере, раз в сутки, независимо от того, когда и сколько раз был
