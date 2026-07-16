@@ -233,6 +233,55 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
+## Блокировка индексации на время тестирования
+
+Пока сайт в тестовом режиме (первый деплой, проверка публикации,
+ещё нет реального контента для пользователей), поисковики **не должны**
+его индексировать — иначе в Google/Яндекс попадут тестовые/пустые
+страницы, от которых потом сложно избавиться.
+
+Добавлено в блок `location /` конфига Nginx
+(`/etc/nginx/sites-available/chislavlasti.com`):
+
+```nginx
+location / {
+    add_header X-Robots-Tag "noindex, nofollow";
+    proxy_pass http://localhost:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+}
+```
+
+Заголовок `X-Robots-Tag: noindex, nofollow` действует так же, как
+`<meta name="robots" content="noindex, nofollow">`, но накладывается на
+уровне Nginx — не требует правки кода или пересборки Next.js, снимается
+одной правкой конфига.
+
+**Обязательно удалить эту строку перед реальным запуском в продакшн** —
+иначе сайт никогда не попадёт в поисковую выдачу. После удаления:
+
+```bash
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+Проверка текущего состояния (какая бы страница сайта ни проверялась):
+
+```bash
+curl -I http://chislavlasti.com | grep X-Robots-Tag
+```
+
+Если строка `X-Robots-Tag: noindex, nofollow` есть в ответе — индексация
+заблокирована. Если её нет — сайт открыт для поисковых ботов.
+
+Отдельно стоит проверить `site/app/robots.ts` (динамический
+`/robots.txt`) перед реальным запуском — там не должно остаться
+забытых `Disallow: /`, если такие вставлялись на время тестов через код,
+а не только через Nginx-заголовок.
+
 ## SSL (после подключения домена)
 
 ```bash
