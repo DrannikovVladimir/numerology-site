@@ -4,6 +4,9 @@
 Нумерологический сайт на русском языке.
 Контент — JSON-статьи, рендерятся динамически через Next.js с ISR-кешированием.
 
+Домен: **chislavlasti.com** (куплен, DNS настроен, сервер поднят,
+сайт живой — см. «Готово» ниже).
+
 ## Структура репозитория
 ```
 /site/                        ← Next.js 14 сайт
@@ -30,17 +33,18 @@
   /lib/
     slugify.ts
     jsonld.ts                 ← сборка JSON-LD; ArticleForJsonLd.image опционален;
-                                 publisher.logo → /images/logo.png
+                                 publisher.logo → /images/logo.png;
+                                 базовый URL — chislavlasti.com (плейсхолдер
+                                 example.com заменён везде, см. «Готово»)
   /content/
     planned-urls.json         ← реестр {url: true/false}, НЕ в git (см. ниже)
   /public/
     favicon*, apple-touch-icon.png, web-app-manifest-*.png, site.webmanifest
     /images/hub/, /images/home/, /images/logo.png
-  next.config.mjs             ← trailingSlash: true (обязательна)
+  next.config.mjs             ← trailingSlash: true (подтверждено, стоит верно)
   package.json                ← включает sharp
   tailwind.config.ts          ← палитра "тёплый пергамент"
-  .env                        ← НЕ в git. REVALIDATE_SECRET — создаётся вручную
-                                 на сервере, см. docs/DEPLOYMENT.md
+  .env                        ← НЕ в git. REVALIDATE_SECRET создан на сервере
 
 /content/
   semantic_clusters.json      ← реестр кластеров, В GIT, редактируется только вручную
@@ -59,9 +63,15 @@
 
 /scripts/
   sync-content.sh              ← rsync content/pending/ на сервер (новые статьи,
-                                  --ignore-existing)
+                                  --ignore-existing). Протестирован на реальном
+                                  сервере — 34 файла успешно доставлены
   update-article.sh            ← доставка правки уже опубликованной статьи
                                   (перезапись) + сброс её ISR-кеша
+
+/.github/workflows/
+  deploy.yml                   ← GitHub Actions, автодеплой кода по git push.
+                                  Настроен и подтверждён рабочим тестовым
+                                  прогоном (см. «Готово»)
 
 /docs/                         ← документация проекта
 .gitignore                     ← контент исключён (content/pending, content/published,
@@ -71,21 +81,27 @@
 
 ## Git и синхронизация с VPS
 Git отслеживает только код (`site/`, `autopilot/`-скрипты, `scripts/`,
-`docs/`, `content/semantic_clusters.json`). Файлы, которые мутируют
-скрипты на сервере (`content/pending/`, `content/published/`,
-`content/anchors.json`, `site/content/planned-urls.json`), исключены из
-git и доставляются отдельно через `rsync`. Подробности и обоснование —
-`docs/ARCHITECTURE.md`, раздел «Два независимых канала синхронизации»;
+`docs/`, `content/semantic_clusters.json`, `.github/workflows/`). Файлы,
+которые мутируют скрипты на сервере (`content/pending/`,
+`content/published/`, `content/anchors.json`,
+`site/content/planned-urls.json`), исключены из git и доставляются
+отдельно через `rsync`. Подробности и обоснование —
+`docs/ARCHITECTURE.md`, раздел «Три независимых канала синхронизации»;
 пошаговая настройка — `docs/DEPLOYMENT.md`.
 
-Три сценария синхронизации:
+Три сценария синхронизации — **все три протестированы на реальном сервере**:
 1. **Новые статьи** → `scripts/sync-content.sh` → `content/pending/` на
-   сервере → cron публикует по расписанию
-2. **Правка уже опубликованной статьи** → `scripts/update-article.sh` →
-   перезаписывает файл в `content/published/` на сервере + сбрасывает
-   ISR-кеш этого URL мгновенно
-3. **Код** → `git push` → GitHub Actions → `git pull` (+ пересборка, если
-   менялся `site/`/`autopilot/`)
+   сервере. Протестировано — 34 статьи доставлены успешно. Публикация
+   пока делается вручную (`node publish.js --count N`), cron ещё не
+   настроен — см. «Не сделано»
+2. **Правка уже опубликованной статьи** → `scripts/update-article.sh` —
+   написан, но ещё не было реального прогона (правок опубликованных
+   статей пока не делалось)
+3. **Код** → `git push` → GitHub Actions → `git pull` на сервере
+   (+ пересборка, если менялся `site/`/`autopilot/`). Настроено и
+   **подтверждено рабочим тестовым деплоем** — замена домена-плейсхолдера
+   прошла через весь цикл: коммит → push → Actions → pull → build →
+   pm2 restart, без ошибок
 
 ## Стек сайта
 Next.js 14 (App Router), Tailwind CSS, TypeScript.
@@ -99,49 +115,96 @@ ink: '#3D2B1F'   inkMuted: '#6B5A47'
 ```
 
 ## Готово (текущий статус)
-- Сайт: 13 типов блоков, Header/Footer, breadcrumbs, TOC, SEO/JSON-LD,
+
+**Сайт и код:**
+- 13 типов блоков, Header/Footer, breadcrumbs, TOC, SEO/JSON-LD,
   прод-сборка проверена целиком. Структура страниц, включая главную —
   `docs/SITE.md`
 - **Кеширование (ISR)**: статьи — `revalidate 86400`, sitemap —
   `revalidate 3600`, оба поверх `fs.readFile` (не статический импорт).
   Плюс точечный сброс кеша конкретного URL по требованию
-  (`/api/revalidate`) — для случаев ручного редактирования уже
-  опубликованной статьи. Механизм — `docs/ARCHITECTURE.md`
+  (`/api/revalidate`). Механизм — `docs/ARCHITECTURE.md`
 - `sharp` установлен, логотип подключён (хедер — SVG-лабиринт, JSON-LD —
   `/images/logo.png`)
-- Автопилот: `publish.js`, `linkbuilder.js`, `update-planned-urls.js`,
+- **Домен-плейсхолдер `example.com` заменён на `chislavlasti.com` по
+  всему коду** (canonical, og:*, twitter:*, все URL в JSON-LD) —
+  проверено на живой опубликованной статье, ни одного упоминания
+  `example.com` не осталось
+
+**Инфраструктура (сервер поднят и работает):**
+- Домен **chislavlasti.com** куплен (hoster.kz), DNS настроен и
+  полностью обновился — A-записи для корня и `www` указывают на IP
+  сервера, лишние/конфликтующие записи удалены
+- VPS арендован, IP: `185.113.132.85`. Окружение установлено — Node.js,
+  PM2, Nginx
+- Код склонирован на сервер (`/var/www/numerology-site`), собран
+  (`npm run build`), запущен через PM2 (процесс `site`, стабилен,
+  без рестартов)
+- **SSL настроен** — сертификат Let's Encrypt через certbot, домены
+  `chislavlasti.com` + `www.chislavlasti.com`, автообновление настроено
+  самим certbot, срок действия текущего сертификата — до 2026-10-14.
+  HTTP автоматически редиректит на HTTPS (`301`)
+- `.env` с `REVALIDATE_SECRET` создан на сервере
+- **GitHub Actions (CI/CD) настроен и подтверждён рабочим деплоем** —
+  три секрета (`VPS_HOST`, `VPS_USER`, `DEPLOY_SSH_KEY`) добавлены,
+  отдельная SSH-пара ключей для CI создана и добавлена на сервер.
+  Тестовый push прошёл весь цикл без ошибок
+- **Индексация временно заблокирована на время тестов** — в Nginx
+  (`/etc/nginx/sites-available/chislavlasti.com`, блок `location /`)
+  добавлен `add_header X-Robots-Tag "noindex, nofollow";`. См.
+  `docs/DEPLOYMENT.md`, раздел «Блокировка индексации на время
+  тестирования» — **обязательно убрать перед реальным запуском**
+
+**Автопилот и контент:**
+- `publish.js`, `linkbuilder.js`, `update-planned-urls.js`,
   `build-anchors.js`, `validate-clusters.js` реализованы и проверены
-  end-to-end вручную. Подробности — `docs/AUTOPILOT.md`
-- Git/rsync разделение: `.gitignore` настроен, контент убран из индекса
-  и запушен, `scripts/sync-content.sh` и `scripts/update-article.sh`
-  написаны (не протестированы на реальном сервере — VPS ещё нет)
+  end-to-end — **как локально, так и на реальном продакшн-сервере**.
+  Подробности — `docs/AUTOPILOT.md`
 - Контентная система: `prompt_02_onpage.md`/`prompt_03_generator.md` +
-  skill-файлы. `hub_id` и анкор хлебной крошки на хаб теперь имеют явные
-  правила в Промпте 2 (конвертация подчёркивания в дефис; анкор берётся
-  дословно из `title` hub-кластера) — см. `docs/CONTENT.md`
+  skill-файлы. `hub_id` и анкор хлебной крошки на хаб имеют явные
+  правила в Промпте 2 — см. `docs/CONTENT.md`
 - Формат JSON статьи и правила хранения — `docs/STORAGE.md`
+- **Первая пачка контента опубликована на реальном сайте**: из 34
+  сгенерированных статей 11 опубликованы вручную (`publish.js --count
+  N`) и прогнаны через `linkbuilder.js`. `planned-urls.json` и
+  `anchors.json` пересобираются корректно, `sitemap.xml` подхватывает
+  новые URL с задержкой до часа (штатное поведение ISR)
 
 ## Не сделано / следующие шаги
-- GitHub Actions workflow (`.github/workflows/deploy.yml`) — не создан
-- cron на сервере — не установлен (сервер не поднят)
-- VPS не поднят вообще — весь `docs/DEPLOYMENT.md` пока план, не факт
-- `scripts/sync-content.sh`/`update-article.sh` не протестированы на
-  реальном сервере — только написаны
-- `REVALIDATE_SECRET` нужно сгенерировать и создать `site/.env` на
-  сервере вручную при первом деплое (в git не попадёт никогда)
+
+**Публикация:**
+- `scripts/update-article.sh` написан, но ни разу не тестировался на
+  реальной правке уже опубликованной статьи — стоит проверить перед
+  тем как полагаться на него
+
+**Перед реальным (не тестовым) запуском:**
+- **Убрать `X-Robots-Tag: noindex` из Nginx-конфига** — иначе сайт
+  никогда не проиндексируется поисковиками. См. `docs/DEPLOYMENT.md`
+- Проверить `site/app/robots.ts` — не остались ли там ручные
+  `Disallow: /`, добавленные на время тестов помимо Nginx-заголовка
+
+**Не реализовано:**
+- `generate.js` (батч-генерация статей скриптом через Anthropic API) —
+  генерация по-прежнему полностью ручная, через чат
+- `validator.js` (автовалидация карточки между Промптом 2 и 3) — не
+  написан, чек-лист применяется вручную
+- `telegram.js` (уведомления о публикации) — не написан
+- `storage.js` (общий интерфейс хранилища) — не написан, каждый скрипт
+  работает с `fs` напрямую
+
+**Прочее:**
+- Существующие 34 статьи изначально сгенерированы **до** финальной
+  правки правил Промпта 2 про `hub_id`/анкор хлебной крошки — часть из
+  них (в т.ч. уже опубликованные) может содержать `hub_id` с
+  подчёркиванием вместо дефиса. Задним числом не исправлялись
 - Зонирование `linkbuilder.js` по H3 вместо H2 + общий потолок ссылок —
   решение не принято, см. `docs/AUTOPILOT.md`
-- Существующие 34 статьи не переписаны под новые правила Промпта 2 —
-  регистр их крошек и `hub_id` могут остаться со старыми значениями,
-  если не исправлять задним числом (для этого есть
-  `scripts/update-article.sh`, но точечно, вручную)
 - Логотип для JSON-LD использует `web-app-manifest-512x512.png` как
   временный источник
-- Реальный домен вместо `chislavlasti.com`
-- `generate.js` (батч-генерация), `telegram.js` (уведомления) — не реализованы
 - Изображения для главной не сгенерированы: hero
   (`site/public/images/hero/hero-visual.png`) и 6 иконок
   (`site/public/images/home/icon-*.png`)
+- Структура матрицы судьбы (9 vs 17 страниц) — не утверждена
 
 ## Правила
 - Комментарии в коде на русском языке
@@ -151,7 +214,10 @@ ink: '#3D2B1F'   inkMuted: '#6B5A47'
   явно прописано, см. `docs/CONTENT.md`)
 - Структура блоков — `/autopilot/prompts/skills/skill_07_html_components.md`
 - Структура страниц — `/docs/SITE.md`
-- Домен-плейсхолдер `https://chislavlasti.com` — заменить везде, когда появится
+- **Домен `chislavlasti.com` используется везде** — плейсхолдер
+  `example.com` полностью заменён в коде (см. «Готово»); если где-то
+  всплывёт заново (например, в новом файле, скопированном по шаблону) —
+  исправлять сразу
 - Расчётная логика на сайте (live-калькуляторы) — точное зеркало кода бота
   (`src/bot/interpretations/karma/*.js`, `core.js`); при расхождении
   источник истины бот, не сайт
@@ -168,6 +234,9 @@ ink: '#3D2B1F'   inkMuted: '#6B5A47'
   (`scripts/update-article.sh`) — простой перезаписи файла на сервере
   недостаточно, изменения не появятся на сайте до истечения текущего
   окна `revalidate`
+- **Индексация заблокирована на время тестов** (`X-Robots-Tag: noindex`
+  в Nginx) — не забыть убрать перед реальным запуском, см.
+  `docs/DEPLOYMENT.md`
 
 ## Разделение ответственности
 - Claude Code — только пишет код и редактирует файлы

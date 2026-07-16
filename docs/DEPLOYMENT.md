@@ -1,8 +1,8 @@
 # Деплой на VPS
 
-Деплой ещё не выполнялся — это инструкция на будущее. Отражает решение:
-git синхронизирует только код, контент доставляется отдельно через rsync
-(см. `docs/ARCHITECTURE.md`, раздел «Три независимых канала
+Домен: `chislavlasti.com`. IP сервера: `185.113.132.85`.
+Git синхронизирует только код, контент доставляется отдельно через
+rsync (см. `docs/ARCHITECTURE.md`, раздел «Три независимых канала
 синхронизации»).
 
 ## Требования к серверу
@@ -28,26 +28,22 @@ npm install -g pm2
 # Nginx
 sudo apt install -y nginx
 
-# Certbot (SSL — после подключения домена)
+# Certbot
 sudo apt install -y certbot python3-certbot-nginx
 ```
 
 ## Первоначальный запуск (один раз)
 
 ```bash
-# 1. Клонировать репозиторий (.gitignore уже настроен, контент туда не попадёт)
 git clone https://github.com/твой-репозиторий /var/www/numerology-site
 cd /var/www/numerology-site
 
-# 2. Создать папки под контент (их нет в git)
 mkdir -p content/pending content/published content/error
 
-# 3. Создать .env с секретом для сброса кеша (НЕ в git, только на сервере)
 cd site
 echo "REVALIDATE_SECRET=$(openssl rand -hex 32)" > .env
-cat .env   # сохрани это значение — понадобится в scripts/update-article.sh
+cat .env   # сохрани значение — понадобится в scripts/update-article.sh
 
-# 4. Собрать и поднять сайт
 npm install
 npm run build
 pm2 start npm --name "site" -- start
@@ -55,83 +51,80 @@ pm2 save
 pm2 startup
 ```
 
-Перед `npm run build` убедиться, что `next.config.mjs` содержит
-`trailingSlash: true` — без этой настройки прод-сборка отдаёт `308
-Permanent Redirect` на каждой статье.
+Перед `npm run build` — `next.config.mjs` должен содержать
+`trailingSlash: true`, иначе прод-сборка отдаёт `308 Permanent
+Redirect` на каждой статье.
 
-## Доставка первых статей на сервер
+## Доставка статей на сервер
 
 Локально, из корня репозитория:
 ```bash
-VPS_HOST=user@1.2.3.4 bash scripts/sync-content.sh
+VPS_HOST=root@185.113.132.85 bash scripts/sync-content.sh
 ```
-Требует, чтобы SSH-доступ к серверу был настроен по ключу (без пароля).
-Скрипт использует `rsync --ignore-existing` — безопасен для повторных
-запусков, не тронет файлы, уже обработанные на сервере.
+`rsync --ignore-existing` — безопасен для повторных запусков, не
+трогает файлы, уже обработанные на сервере.
 
-## Публикация первых 30 статей (один раз, вручную)
+## Публикация статей
 
+Ручной запуск (разовый батч):
 ```bash
-ssh user@your-vps-ip
-cd /var/www/numerology-site
-node autopilot/publish.js --count 30
-node autopilot/linkbuilder.js --dir content/published/
+ssh root@185.113.132.85
+cd /var/www/numerology-site/autopilot
+node publish.js --count 30
+node linkbuilder.js --dir ../content/published/
 ```
 
 ## Автопубликация — cron на сервере
 
 ```bash
 crontab -e
-# Добавить строку:
-0 10 * * * cd /var/www/numerology-site/autopilot && node publish.js --count 1 && node linkbuilder.js --dir ../content/published/ >> /var/log/autopilot.log 2>&1
 ```
-Одна строка делает оба шага подряд: публикует статью(-и) из очереди,
-затем прогоняет линкбилдер по всей папке `published/`.
-`linkbuilder.js --dir` безопасно перезапускать на уже слинкованных
-статьях — он пропускает зоны, где ссылка уже стоит.
+```
+0 */2 * * * cd /var/www/numerology-site/autopilot && node publish.js --count 1 && node linkbuilder.js --dir ../content/published/ >> /var/log/autopilot.log 2>&1
+```
+Публикует 1 статью из очереди каждые 2 часа (время сервера —
+`Etc/UTC`), сразу прогоняет линкбилдер по `published/`.
+`linkbuilder.js --dir` безопасно перезапускать повторно — пропускает
+зоны, где ссылка уже стоит.
 
-Дальше единственное, что нужно делать вручную — генерировать новые
-статьи локально и раз в какое-то время запускать `sync-content.sh`,
-чтобы доставить их в очередь на сервере. Публикация из очереди
-происходит сама, по одной в день.
+Проверить активные задачи: `crontab -l`.
 
 ## Обновление уже опубликованной статьи
 
-Если статью нужно доработать (добавить картинки, раздел и т.п.) уже
-после публикации:
 ```bash
 # 1. Скачать текущую версию с сервера
-rsync -avz user@1.2.3.4:/var/www/numerology-site/content/published/chislo-sudby-7.json content/published/
+rsync -avz root@185.113.132.85:/var/www/numerology-site/content/published/chislo-sudby-7.json content/published/
 
-# 2. Отредактировать локально content/published/chislo-sudby-7.json
+# 2. Отредактировать локально
 
-# 3. Отправить обновление и сбросить кеш этой страницы
-REVALIDATE_SECRET=<значение из site/.env на сервере> VPS_HOST=user@1.2.3.4 \
+# 3. Отправить обновление и сбросить кеш страницы
+REVALIDATE_SECRET=<значение из site/.env на сервере> VPS_HOST=root@185.113.132.85 \
   bash scripts/update-article.sh content/published/chislo-sudby-7.json /chislo-sudby/7/
 ```
-`update-article.sh` сам проставит `date_modified`, перезапишет файл на
-сервере (не через `pending/`) и вызовет `/api/revalidate` — изменения
-появятся на сайте сразу, без ожидания суточного окна кеша и без
-пересборки. Подробности механизма — `docs/ARCHITECTURE.md`.
+`update-article.sh` проставляет `date_modified`, перезаписывает файл
+на сервере (не через `pending/`) и вызывает `/api/revalidate` —
+изменения появляются на сайте сразу. Механизм — `docs/ARCHITECTURE.md`.
 
-## Кеширование (ISR) — почему пересборка сайта не нужна для контента
+**Не тестировано на реальной правке** — проверить перед тем как
+полагаться на скрипт в боевой работе.
 
-Сайт использует on-demand ISR:
-- `/[...slug]/page.tsx` — `revalidate = 86400` (сутки). Новая статья
-  открывается сразу же по первому запросу, без пересборки и рестарта PM2
-- `sitemap.xml` — `revalidate = 3600` (час). Новая публикация появляется
-  в sitemap автоматически в течение часа, тоже без пересборки
-- Правка уже опубликованной статьи — мгновенно, через
-  `scripts/update-article.sh` и `/api/revalidate` (см. выше)
+## Кеширование (ISR)
 
-`npm run build` нужен **только** при изменении кода сайта — компонентов,
-стилей, конфигурации. Публикация и правка контента его не требуют.
+- `/[...slug]/page.tsx` — `revalidate = 86400` (сутки)
+- `sitemap.xml` — `revalidate = 3600` (час) — новая публикация
+  появляется в sitemap с задержкой до часа, это штатное поведение
+- Правка опубликованной статьи — мгновенно, через
+  `scripts/update-article.sh` + `/api/revalidate`
+
+`npm run build` нужен только при изменении кода сайта — публикация и
+правка контента пересборки не требуют.
 
 ## CI/CD — деплой кода по git push
 
-Три секрета в GitHub → Settings → Secrets: `VPS_HOST`, `VPS_USER`,
-`DEPLOY_SSH_KEY` (приватный ключ; публичный — в `~/.ssh/authorized_keys`
-на сервере).
+Три секрета в GitHub → Settings → Secrets: `VPS_HOST`
+(`185.113.132.85`), `VPS_USER` (`root`), `DEPLOY_SSH_KEY` (отдельная
+SSH-пара для CI, не та, которой заходят на сервер вручную; публичный
+ключ — в `~/.ssh/authorized_keys` на сервере).
 
 `.github/workflows/deploy.yml`:
 ```yaml
@@ -184,40 +177,35 @@ jobs:
             pm2 restart site
 ```
 
-**Что это даёт:**
-- Правка компонента/стиля/конфига → `git push` → сайт пересобран и
-  перезапущен автоматически
-- Новая пачка статей → **не через git**, а через `scripts/sync-content.sh`
-- Правка существующей статьи → **не через git**, а через
-  `scripts/update-article.sh`
-
-CI/CD **не должен** вызывать `publish.js` — публикация только по cron
-на сервере, раз в сутки, независимо от того, когда и сколько раз был
-сделан push кода.
+- Правка компонента/стиля/конфига → `git push` → пересборка и рестарт
+  автоматически
+- Новая пачка статей → `scripts/sync-content.sh`, не через git
+- Правка существующей статьи → `scripts/update-article.sh`, не через git
+- CI/CD не вызывает `publish.js` — публикация только по cron
 
 ## Настройка Nginx
+
+`/etc/nginx/sites-available/chislavlasti.com`:
 
 ```nginx
 server {
     listen 80;
     server_name chislavlasti.com www.chislavlasti.com;
 
-    # Статика Next.js — кэш на год
     location /_next/static/ {
         alias /var/www/numerology-site/site/.next/static/;
         expires 1y;
         add_header Cache-Control "public, immutable";
     }
 
-    # Изображения — кэш на месяц
     location /images/ {
         alias /var/www/numerology-site/content/images/;
         expires 30d;
         add_header Cache-Control "public";
     }
 
-    # Всё остальное — Next.js
     location / {
+        add_header X-Robots-Tag "noindex, nofollow";
         proxy_pass http://localhost:3000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -228,87 +216,130 @@ server {
 }
 ```
 
+После правки конфига:
 ```bash
 sudo nginx -t
 sudo systemctl reload nginx
 ```
+
+После запуска certbot (см. ниже) в файл автоматически добавляются
+блоки для SSL — certbot сам модифицирует конфиг, вручную добавленные
+строки (например, `X-Robots-Tag`) сохраняются.
 
 ## Блокировка индексации на время тестирования
 
-Пока сайт в тестовом режиме (первый деплой, проверка публикации,
-ещё нет реального контента для пользователей), поисковики **не должны**
-его индексировать — иначе в Google/Яндекс попадут тестовые/пустые
-страницы, от которых потом сложно избавиться.
+`X-Robots-Tag: noindex, nofollow` в блоке `location /` (см. конфиг
+выше) — действует так же, как `<meta name="robots"
+content="noindex, nofollow">`, но на уровне Nginx, без пересборки
+Next.js.
 
-Добавлено в блок `location /` конфига Nginx
-(`/etc/nginx/sites-available/chislavlasti.com`):
-
-```nginx
-location / {
-    add_header X-Robots-Tag "noindex, nofollow";
-    proxy_pass http://localhost:3000;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
-    proxy_cache_bypass $http_upgrade;
-}
-```
-
-Заголовок `X-Robots-Tag: noindex, nofollow` действует так же, как
-`<meta name="robots" content="noindex, nofollow">`, но накладывается на
-уровне Nginx — не требует правки кода или пересборки Next.js, снимается
-одной правкой конфига.
-
-**Обязательно удалить эту строку перед реальным запуском в продакшн** —
-иначе сайт никогда не попадёт в поисковую выдачу. После удаления:
-
+**Убрать перед реальным запуском в продакшн**, иначе сайт не попадёт
+в поисковую выдачу:
 ```bash
 sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-Проверка текущего состояния (какая бы страница сайта ни проверялась):
-
+Проверка:
 ```bash
-curl -I http://chislavlasti.com | grep X-Robots-Tag
+curl -I https://chislavlasti.com | grep X-Robots-Tag
 ```
+Строка в ответе = индексация заблокирована.
 
-Если строка `X-Robots-Tag: noindex, nofollow` есть в ответе — индексация
-заблокирована. Если её нет — сайт открыт для поисковых ботов.
+Отдельно проверить `site/app/robots.ts` перед реальным запуском — не
+должно быть забытых `Disallow: /`.
 
-Отдельно стоит проверить `site/app/robots.ts` (динамический
-`/robots.txt`) перед реальным запуском — там не должно остаться
-забытых `Disallow: /`, если такие вставлялись на время тестов через код,
-а не только через Nginx-заголовок.
-
-## SSL (после подключения домена)
+## SSL
 
 ```bash
 sudo certbot --nginx -d chislavlasti.com -d www.chislavlasti.com
 ```
-Certbot автоматически обновляет сертификат каждые 90 дней.
+Выпускает сертификат для обоих доменов, настраивает редирект HTTP →
+HTTPS (`301`), ставит автообновление в фоне.
+
+Текущий сертификат действителен до **2026-10-14**.
+
+Проверка:
+```bash
+curl -I https://chislavlasti.com   # HTTP/1.1 200 OK
+curl -I http://chislavlasti.com    # 301 → https://chislavlasti.com/
+```
+
+## Логирование
+
+| Источник | Файл(ы) | Ротация |
+|---|---|---|
+| Публикатор + линкбилдер (cron) | `/var/log/autopilot.log` | logrotate, см. ниже |
+| PM2 (процесс `site`) | `~/.pm2/logs/site-*.log` | pm2-logrotate, см. ниже |
+| Nginx | `/var/log/nginx/access.log`, `error.log` | системный logrotate (штатно, из коробки) |
+
+**PM2:**
+```bash
+pm2 install pm2-logrotate
+```
+Дефолты: макс. размер файла 10MB, хранится 30 копий, проверка раз в
+сутки. Проверить: `pm2 list` (должен появиться процесс
+`pm2-logrotate`), настройки — `pm2 conf pm2-logrotate`.
+
+**autopilot.log:**
+```bash
+sudo nano /etc/logrotate.d/autopilot
+```
+```
+/var/log/autopilot.log {
+    weekly
+    rotate 4
+    compress
+    missingok
+    notifempty
+}
+```
+Проверка конфига без применения: `sudo logrotate -d
+/etc/logrotate.d/autopilot`.
+
+**Важная ловушка:** `logrotate` откажется ротировать лог, если
+родительская директория (`/var/log/`) считается «insecure» — world-
+или group-writable для группы, отличной от `root`. На Ubuntu `/var/log/`
+по умолчанию принадлежит `root:syslog` с правами `755` — это
+корректно и безопасно (группа `syslog` нужна демону `rsyslog`, но
+права `755` не дают группе писать). Если права почему-то оказались
+шире (`775`/`777`), правильное исправление — вернуть `755`, **не
+трогая владельца/группу**:
+```bash
+sudo chmod 755 /var/log/
+```
+Менять `chown` на `root:root` не нужно и рискованно — это может лишить
+`rsyslog` прав на создание системных логов. Если группа всё же была
+изменена по ошибке, вернуть:
+```bash
+sudo chown root:syslog /var/log/
+```
 
 ## Мониторинг
 
 ```bash
-# Статус сайта
 pm2 status
 pm2 logs site
-
-# Логи публикатора и линкбилдера
 tail -f /var/log/autopilot.log
-
-# Nginx логи
 tail -f /var/log/nginx/access.log
 tail -f /var/log/nginx/error.log
+crontab -l
 ```
 
 ## Бэкап
 
 ```bash
-# Бэкап контента (раз в неделю через cron на сервере)
-0 3 * * 0 tar -czf /backup/content-$(date +%Y%m%d).tar.gz /var/www/numerology-site/content/
+crontab -e
 ```
-Контент не в git — это единственная копия данных, кроме локальной машины;
-бэкап на сервере обязателен, не опционален.
+```
+0 3 * * 0 mkdir -p /backup && tar -czf /backup/content-$(date +\%Y\%m\%d).tar.gz /var/www/numerology-site/content/
+```
+Архивирует `content/` каждое воскресенье в 03:00 (время сервера).
+Внутри crontab символ `%` требует экранирования (`\%`), иначе
+трактуется как перенос строки.
+
+Контент не в git — бэкап на сервере является дополнительной защитой
+поверх локальной копии на машине разработки.
+
+**Не сделано:** ротация старых бэкапов — архивы в `/backup/` копятся
+без автоудаления, стоит настроить при накоплении файлов.
