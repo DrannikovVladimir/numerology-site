@@ -200,7 +200,7 @@ CI/CD **не должен** вызывать `publish.js` — публикаци
 ```nginx
 server {
     listen 80;
-    server_name example.com www.example.com;
+    server_name chislavlasti.com www.chislavlasti.com;
 
     # Статика Next.js — кэш на год
     location /_next/static/ {
@@ -285,7 +285,7 @@ curl -I http://chislavlasti.com | grep X-Robots-Tag
 ## SSL (после подключения домена)
 
 ```bash
-sudo certbot --nginx -d example.com -d www.example.com
+sudo certbot --nginx -d chislavlasti.com -d www.chislavlasti.com
 ```
 Certbot автоматически обновляет сертификат каждые 90 дней.
 

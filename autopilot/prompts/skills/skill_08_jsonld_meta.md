@@ -40,23 +40,23 @@ Copilot grounding) — но больше не даёт визуального с
           "@type": "ListItem",
           "position": 1,
           "name": "Главная",
-          "item": "https://example.com/"
+          "item": "https://chislavlasti.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
           "name": "{{meta.h1}}",
-          "item": "https://example.com{{url}}"
+          "item": "https://chislavlasti.com{{url}}"
         }
       ]
     },
     {
       "@type": "Article",
-      "@id": "https://example.com{{url}}#article",
+      "@id": "https://chislavlasti.com{{url}}#article",
       "headline": "{{meta.h1}}",
       "description": "{{meta.description}}",
-      "image": "https://example.com{{image}}",
-      "url": "https://example.com{{url}}",
+      "image": "https://chislavlasti.com{{image}}",
+      "url": "https://chislavlasti.com{{url}}",
       "inLanguage": "ru",
       "datePublished": "{{date_published}}",
       "dateModified": "{{date_modified}}",
@@ -69,10 +69,10 @@ Copilot grounding) — но больше не даёт визуального с
         "name": "{{site_name}}",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://example.com/logo.png"
+          "url": "https://chislavlasti.com/logo.png"
         }
       },
-      "mainEntityOfPage": "https://example.com{{url}}"
+      "mainEntityOfPage": "https://chislavlasti.com{{url}}"
     },
     {
       "@type": "FAQPage",
@@ -111,35 +111,35 @@ Copilot grounding) — но больше не даёт визуального с
           "@type": "ListItem",
           "position": 1,
           "name": "Главная",
-          "item": "https://example.com/"
+          "item": "https://chislavlasti.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
           "name": "{{internal_links.up.anchor}}",
-          "item": "https://example.com{{internal_links.up.url}}"
+          "item": "https://chislavlasti.com{{internal_links.up.url}}"
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": "{{meta.h1}}",
-          "item": "https://example.com{{url}}"
+          "item": "https://chislavlasti.com{{url}}"
         }
       ]
     },
     {
       "@type": "Article",
-      "@id": "https://example.com{{url}}#article",
+      "@id": "https://chislavlasti.com{{url}}#article",
       "headline": "{{meta.h1}}",
       "description": "{{meta.description}}",
-      "image": "https://example.com{{image}}",
-      "url": "https://example.com{{url}}",
+      "image": "https://chislavlasti.com{{image}}",
+      "url": "https://chislavlasti.com{{url}}",
       "inLanguage": "ru",
       "datePublished": "{{date_published}}",
       "dateModified": "{{date_modified}}",
       "isPartOf": {
         "@type": "WebPage",
-        "@id": "https://example.com{{internal_links.up.url}}"
+        "@id": "https://chislavlasti.com{{internal_links.up.url}}"
       },
       "author": {
         "@type": "Organization",
@@ -150,10 +150,10 @@ Copilot grounding) — но больше не даёт визуального с
         "name": "{{site_name}}",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://example.com/logo.png"
+          "url": "https://chislavlasti.com/logo.png"
         }
       },
-      "mainEntityOfPage": "https://example.com{{url}}"
+      "mainEntityOfPage": "https://chislavlasti.com{{url}}"
     },
     {
       "@type": "FAQPage",
@@ -198,10 +198,10 @@ Copilot grounding) — но больше не даёт визуального с
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "{{site_name}}",
-  "url": "https://example.com/",
+  "url": "https://chislavlasti.com/",
   "potentialAction": {
     "@type": "SearchAction",
-    "target": "https://example.com/search?q={search_term_string}",
+    "target": "https://chislavlasti.com/search?q={search_term_string}",
     "query-input": "required name=search_term_string"
   }
 }
@@ -212,8 +212,8 @@ Copilot grounding) — но больше не даёт визуального с
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "{{site_name}}",
-  "url": "https://example.com/",
-  "logo": "https://example.com/logo.png",
+  "url": "https://chislavlasti.com/",
+  "logo": "https://chislavlasti.com/logo.png",
   "sameAs": [
     "https://t.me/chisla_vlasti"
   ]

@@ -1,4 +1,4 @@
-const DOMAIN = "https://example.com";
+const DOMAIN = "https://chislavlasti.com";
 const SITE_NAME = "Нумерология";
 
 interface ArticleForJsonLd {

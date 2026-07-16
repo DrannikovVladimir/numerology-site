@@ -100,15 +100,15 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     keywords: article.primary_keyword,
     robots: { index: true, follow: true },
     alternates: {
-      canonical: `https://example.com${article.url}`,
+      canonical: `https://chislavlasti.com${article.url}`,
     },
     openGraph: {
       title: article.meta.title,
       description: article.meta.description,
-      url: `https://example.com${article.url}`,
+      url: `https://chislavlasti.com${article.url}`,
       siteName: "Нумерология",
       images: article.image
-        ? [{ url: `https://example.com${article.image}`, width: 1200, height: 630, alt: article.image_alt ?? "" }]
+        ? [{ url: `https://chislavlasti.com${article.image}`, width: 1200, height: 630, alt: article.image_alt ?? "" }]
         : [],
       locale: "ru_RU",
       type: "article",
@@ -117,7 +117,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       card: "summary_large_image",
       title: article.meta.title,
       description: article.meta.description,
-      images: article.image ? [`https://example.com${article.image}`] : [],
+      images: article.image ? [`https://chislavlasti.com${article.image}`] : [],
     },
   };
 }

@@ -11,12 +11,12 @@ export const metadata: Metadata = {
   title: "Нумерология — язык чисел, на котором написана ваша жизнь",
   description: "Нумерология онлайн: числа судьбы, матрица судьбы, ангельские числа, совместимость. Разберитесь с нуля или углубитесь в детали.",
   alternates: {
-    canonical: "https://example.com/",
+    canonical: "https://chislavlasti.com/",
   },
   openGraph: {
     title: "Нумерология — язык чисел, на котором написана ваша жизнь",
     description: "Нумерология онлайн: числа судьбы, матрица судьбы, ангельские числа, совместимость. Разберитесь с нуля или углубитесь в детали.",
-    url: "https://example.com/",
+    url: "https://chislavlasti.com/",
     siteName: "Нумерология",
     locale: "ru_RU",
     type: "website",

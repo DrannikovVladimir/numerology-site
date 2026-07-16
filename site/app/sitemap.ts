@@ -12,7 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const published = Object.entries(plannedUrls)
     .filter(([, published]) => published)
     .map(([url]) => ({
-      url: `https://example.com${url}`,
+      url: `https://chislavlasti.com${url}`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: url.split("/").filter(Boolean).length === 1 ? 0.8 : 0.6,
@@ -20,7 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     {
-      url: "https://example.com/",
+      url: "https://chislavlasti.com/",
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1.0,

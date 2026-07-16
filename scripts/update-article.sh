@@ -20,7 +20,7 @@ ARTICLE_URL="$2"
 
 VPS_HOST="${VPS_HOST:-user@your-vps-ip}"
 VPS_CONTENT_PATH="${VPS_CONTENT_PATH:-/var/www/numerology-site/content/published/}"
-SITE_URL="${SITE_URL:-https://example.com}"
+SITE_URL="${SITE_URL:-https://chislavlasti.com}"
 
 if [ -z "$LOCAL_FILE" ] || [ -z "$ARTICLE_URL" ]; then
   echo "Использование: bash scripts/update-article.sh <путь-к-файлу.json> </url-статьи/>"

@@ -137,7 +137,7 @@ ink: '#3D2B1F'   inkMuted: '#6B5A47'
   `scripts/update-article.sh`, но точечно, вручную)
 - Логотип для JSON-LD использует `web-app-manifest-512x512.png` как
   временный источник
-- Реальный домен вместо `example.com`
+- Реальный домен вместо `chislavlasti.com`
 - `generate.js` (батч-генерация), `telegram.js` (уведомления) — не реализованы
 - Изображения для главной не сгенерированы: hero
   (`site/public/images/hero/hero-visual.png`) и 6 иконок
@@ -151,7 +151,7 @@ ink: '#3D2B1F'   inkMuted: '#6B5A47'
   явно прописано, см. `docs/CONTENT.md`)
 - Структура блоков — `/autopilot/prompts/skills/skill_07_html_components.md`
 - Структура страниц — `/docs/SITE.md`
-- Домен-плейсхолдер `https://example.com` — заменить везде, когда появится
+- Домен-плейсхолдер `https://chislavlasti.com` — заменить везде, когда появится
 - Расчётная логика на сайте (live-калькуляторы) — точное зеркало кода бота
   (`src/bot/interpretations/karma/*.js`, `core.js`); при расхождении
   источник истины бот, не сайт

@@ -55,13 +55,13 @@ export default function RootLayout({
                 {
                   "@type": "WebSite",
                   "name": "Нумерология",
-                  "url": "https://example.com/"
+                  "url": "https://chislavlasti.com/"
                 },
                 {
                   "@type": "Organization",
                   "name": "Нумерология",
-                  "url": "https://example.com/",
-                  "logo": "https://example.com/images/logo.png",
+                  "url": "https://chislavlasti.com/",
+                  "logo": "https://chislavlasti.com/images/logo.png",
                   "sameAs": ["https://t.me/chisla_vlasti"]
                 }
               ]
