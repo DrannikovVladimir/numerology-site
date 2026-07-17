@@ -38,8 +38,11 @@
 Автопилот:    Node.js (publish.js, linkbuilder.js, build-anchors.js,
               update-planned-urls.js, validate-clusters.js)
 Синхронизация: rsync (sync-content.sh, update-article.sh), git — только код
-Сервер:       Ubuntu 24, Nginx, PM2 (деплой ещё не выполнен)
+Сервер:       Ubuntu 24, Nginx, PM2, SSL (Let's Encrypt)
 ```
+
+Актуальный статус деплоя (домен, сервер, CI/CD и т.п.) — единственный
+источник истины `docs/CLAUDE.md`, раздел «Готово».
 
 ## Не реализовано
 Генерация статей скриптом (`generate.js`), автоматическая валидация
@@ -63,3 +66,5 @@
 - [API.md](API.md) — внешние сервисы (Anthropic, Telegram)
 - [DEPLOYMENT.md](DEPLOYMENT.md) — деплой на VPS
 - [CONTENT.md](CONTENT.md) — контентный пайплайн
+- [CLAUDE.md](CLAUDE.md) — актуальный статус проекта (единственный
+  источник истины по тому, что готово и что нет)
