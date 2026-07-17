@@ -56,6 +56,6 @@ rsync -avz "$LOCAL_FILE" "$VPS_HOST:$VPS_CONTENT_PATH"
 
 # 3. Сбросить ISR-кеш этого URL
 echo "Сбрасываю кеш для $ARTICLE_URL..."
-curl -s -X POST "${SITE_URL}/api/revalidate?secret=${REVALIDATE_SECRET}&path=${ARTICLE_URL}"
+curl -s -X POST "${SITE_URL}/api/revalidate/?secret=${REVALIDATE_SECRET}&path=${ARTICLE_URL}"
 echo ""
 echo "Готово. Статья обновлена, кеш сброшен."
