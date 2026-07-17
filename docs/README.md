@@ -65,6 +65,10 @@
 - [STORAGE.md](STORAGE.md) — как и где хранятся данные
 - [API.md](API.md) — внешние сервисы (Anthropic, Telegram)
 - [DEPLOYMENT.md](DEPLOYMENT.md) — деплой на VPS
+- [SECURITY.md](SECURITY.md) — защита сервера (firewall, fail2ban,
+  SSL, автообновления, SSH-доступ)
+- [SSH_ACCESS.md](SSH_ACCESS.md) — настройка SSH-доступа к серверу с
+  новой машины
 - [CONTENT.md](CONTENT.md) — контентный пайплайн
 - [CLAUDE.md](CLAUDE.md) — актуальный статус проекта (единственный
   источник истины по тому, что готово и что нет)

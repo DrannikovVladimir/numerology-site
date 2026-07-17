@@ -79,6 +79,9 @@
                                   прогоном (см. «Готово»)
 
 /docs/                         ← документация проекта
+  SECURITY.md                  ← защита сервера (firewall, fail2ban, SSL,
+                                  автообновления, разделение root/deploy)
+  SSH_ACCESS.md                ← настройка SSH-доступа с новой машины
 .gitignore                     ← контент исключён (content/pending, content/published,
                                   content/anchors.json, site/content/planned-urls.json)
                                   + node_modules, .env, .next
@@ -149,6 +152,14 @@ ink: '#3D2B1F'   inkMuted: '#6B5A47'
 - Код склонирован на сервер (`/var/www/numerology-site`), собран
   (`npm run build`), запущен через PM2 (процесс `site`, стабилен,
   без рестартов)
+- **Сервер защищён** (настроено 17 июля 2026, подробности —
+  `docs/SECURITY.md`): доступ только через пользователя `deploy` по
+  SSH-ключу, root-логин и вход по паролю отключены; firewall (ufw,
+  только 22/80/443); fail2ban (SSH + Nginx); rate limiting на Nginx
+  (в т.ч. отдельно на `/api/revalidate`); TLSv1/1.1 отключены,
+  оставлены TLSv1.2/1.3; unattended-upgrades только для security-патчей,
+  без автоперезагрузки. PM2-процесс `site` и обе cron-задачи
+  (публикация, бэкап) работают от `deploy`, не от root
 - **SSL настроен** — сертификат Let's Encrypt через certbot, домены
   `chislavlasti.com` + `www.chislavlasti.com`, автообновление настроено
   самим certbot, срок действия текущего сертификата — до 2026-10-14.
@@ -241,10 +252,17 @@ ink: '#3D2B1F'   inkMuted: '#6B5A47'
   числом не исправлялись
 - Зонирование `linkbuilder.js` по H3 вместо H2 + общий потолок ссылок —
   решение не принято, см. `docs/AUTOPILOT.md`
+- Логотип для JSON-LD использует `web-app-manifest-512x512.png` как
+  временный источник
 - Ротация старых бэкапов в `/backup/` не настроена — архивы копятся
   без автоудаления
+- Структура матрицы судьбы (9 vs 17 страниц) — не утверждена
 
 ## Правила
+- Доступ на сервер — только пользователь `deploy` по SSH-ключу; root по
+  SSH недоступен. Все команды на сервере (включая ручной запуск
+  publish.js/linkbuilder.js) — от `deploy`, при необходимости root-прав
+  — через `sudo`. Подробности — `docs/SECURITY.md`
 - Комментарии в коде на русском языке
 - Вся документация — `/docs/`
 - `hub_id` в статье — всегда через дефис; в `semantic_clusters.json` поле
