@@ -27,6 +27,26 @@ export default function Footer() {
             </Link>
           ))}
         </nav>
+        <nav className="mt-6 flex flex-wrap gap-x-6 gap-y-2 border-t border-sand pt-6">
+          <Link
+            href="/karta-sajta/"
+            className="text-sm text-inkMuted hover:text-terracotta"
+          >
+            Карта сайта
+          </Link>
+          <Link
+            href="/politika-konfidencialnosti/"
+            className="text-sm text-inkMuted hover:text-terracotta"
+          >
+            Политика конфиденциальности
+          </Link>
+          <Link
+            href="/polzovatelskoe-soglashenie/"
+            className="text-sm text-inkMuted hover:text-terracotta"
+          >
+            Пользовательское соглашение
+          </Link>
+        </nav>
         <p className="mt-8 text-sm text-inkMuted">© 2026 Нумерология. Все права защищены.</p>
       </div>
     </footer>
